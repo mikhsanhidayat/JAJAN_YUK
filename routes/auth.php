@@ -8,15 +8,44 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\RegisterPedagangController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register');
+    // ===== Choose Role (Initial Register) =====
+    Route::get('register', function() {
+        return view('auth.choose-role');
+    })->name('register');
 
-    Route::post('register', [RegisteredUserController::class, 'store']);
+    // ===== Register Pembeli =====
+    Route::get('register/pembeli', [RegisteredUserController::class, 'create'])
+        ->name('register.pembeli');
 
+    Route::post('register/pembeli', [RegisteredUserController::class, 'store'])
+        ->name('register.pembeli.store');
+
+    // ===== Register Pedagang =====
+    Route::get('register-pedagang', [RegisterPedagangController::class, 'create'])
+        ->name('register-pedagang');
+
+    Route::post('register-pedagang', [RegisterPedagangController::class, 'store'])
+        ->name('register-pedagang.store');
+
+    // ===== Pedagang Profile & Verifikasi (After Login) =====
+    Route::middleware('auth')->group(function () {
+        Route::get('register-pedagang/profile', [RegisterPedagangController::class, 'showProfile'])
+            ->name('register-pedagang.profile')
+            ->middleware('verified'); // Jika ingin verify email dulu
+
+        Route::post('register-pedagang/profile', [RegisterPedagangController::class, 'storeProfile'])
+            ->name('register-pedagang.profile.store');
+
+        Route::get('register-pedagang/waiting', [RegisterPedagangController::class, 'waiting'])
+            ->name('register-pedagang.waiting');
+    });
+
+    // ===== Login =====
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 

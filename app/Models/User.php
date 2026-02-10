@@ -47,4 +47,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Relasi ke Pedagang (User bisa menjadi Pedagang)
+     */
+    public function pedagang()
+    {
+        return $this->hasOne(Pedagang::class);
+    }
 }

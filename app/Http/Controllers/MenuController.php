@@ -85,4 +85,39 @@ class MenuController extends Controller
         $menu->delete();
         return redirect()->route('menu.index')->with('success', 'Menu berhasil dihapus.');
     }
+
+    public function getNearbyMenu(Request $request)
+{
+    // Koordinat User (didapat dari Browser/GPS)
+    $userLat = $request->lat; 
+    $userLon = $request->lon;
+
+    // 1. CEK GEOFENCING (Misal Radius 20KM dari Tasikmalaya)
+    $tasikLat = -7.3274;
+    $tasikLon = 108.2207;
+    $distanceToTasik = $this->calculateDistance($userLat, $userLon, $tasikLat, $tasikLon);
+
+    if ($distanceToTasik > 20) {
+        return response()->json(['message' => 'Maaf, JajanYuk hanya tersedia di Tasikmalaya'], 403);
+    }
+
+    // 2. FILTER PEDAGANG (Sudah Bayar & Disetujui Admin)
+    $menus = Menu::whereHas('pedagang', function($q) {
+        $q->where('payment_status', 'paid')
+          ->where('admin_status', 'approved')
+          ->where('is_active', true);
+    })->with(['pedagang', 'category'])->get();
+
+    return view('dashboard', compact('menus'));
+}
+
+// Fungsi Haversine Formula untuk hitung jarak
+private function calculateDistance($lat1, $lon1, $lat2, $lon2) {
+    $earthRadius = 6371;
+    $dLat = deg2rad($lat2 - $lat1);
+    $dLon = deg2rad($lon2 - $lon1);
+    $a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon/2) * sin($dLon/2);
+    $c = 2 * atan2(sqrt($a), sqrt(1-$a));
+    return $earthRadius * $c;
+}
 }

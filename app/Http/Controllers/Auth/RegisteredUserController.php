@@ -33,14 +33,13 @@ class RegisteredUserController extends Controller
         'nama' => ['required', 'string', 'max:255'], // Sesuaikan ke 'nama'
         'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
         'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        // 'role' => ['required', 'in:pembeli,pedagang'], // Opsional jika ingin divalidasi
     ]);
 
     $user = User::create([
         'nama' => $request->nama,
         'email' => $request->email,
         'password' => Hash::make($request->password),
-        'role' => $request->role ?? 'pembeli', // Default ke pembeli jika belum ada input role di view
+        'role' => 'pembeli', // Hanya pembeli yang registrasi di sini
     ]);
 
     event(new Registered($user));

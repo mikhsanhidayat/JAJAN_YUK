@@ -1,57 +1,113 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
-
-        <div>
-            <x-input-label for="nama" :value="__('Nama Lengkap')" />
-            <x-text-input id="nama" class="block mt-1 w-full" type="text" name="nama" :value="old('nama')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('nama')" class="mt-2" />
+    <div class="bg-white rounded-lg shadow-md p-8">
+        <!-- Header -->
+        <div class="mb-8 text-center">
+            <h2 class="text-3xl font-black text-orange-500 mb-2">Daftar Pembeli</h2>
+            <p class="text-gray-600 font-semibold">Mulai petualangan kulinermu di Tasikmalaya</p>
         </div>
 
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        <form method="POST" action="{{ route('register.pembeli.store') }}">
+            @csrf
 
-        <div class="mt-4">
-            <x-input-label for="role" :value="__('Daftar Sebagai')" />
-            <select id="role" name="role" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                <option value="pembeli" {{ old('role') == 'pembeli' ? 'selected' : '' }}>Pembeli (Cari Jajanan)</option>
-                <option value="pedagang" {{ old('role') == 'pedagang' ? 'selected' : '' }}>Pedagang (Jualan Jajanan)</option>
-            </select>
-            <x-input-error :messages="$errors->get('role')" class="mt-2" />
-        </div>
+            <!-- Nama Lengkap -->
+            <div class="mb-6">
+                <x-input-label for="nama" :value="__('Nama Lengkap')" />
+                <x-text-input 
+                    id="nama" 
+                    class="block mt-2 w-full" 
+                    type="text" 
+                    name="nama" 
+                    :value="old('nama')" 
+                    required 
+                    autofocus 
+                    autocomplete="name"
+                    placeholder="Masukkan nama lengkap Anda"
+                />
+                <x-input-error :messages="$errors->get('nama')" class="mt-2" />
+            </div>
 
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+            <!-- Email -->
+            <div class="mb-6">
+                <x-input-label for="email" :value="__('Email')" />
+                <x-text-input 
+                    id="email" 
+                    class="block mt-2 w-full" 
+                    type="email" 
+                    name="email" 
+                    :value="old('email')" 
+                    required 
+                    autocomplete="username"
+                    placeholder="contoh@email.com"
+                />
+                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            </div>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
+            <!-- Password -->
+            <div class="mb-6">
+                <x-input-label for="password" :value="__('Password')" />
+                <x-text-input 
+                    id="password" 
+                    class="block mt-2 w-full" 
+                    type="password" 
+                    name="password" 
+                    required 
+                    autocomplete="new-password"
+                    placeholder="Minimal 8 karakter"
+                />
+                <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            </div>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+            <!-- Confirm Password -->
+            <div class="mb-8">
+                <x-input-label for="password_confirmation" :value="__('Konfirmasi Password')" />
+                <x-text-input 
+                    id="password_confirmation" 
+                    class="block mt-2 w-full" 
+                    type="password" 
+                    name="password_confirmation" 
+                    required 
+                    autocomplete="new-password"
+                    placeholder="Ulangi password Anda"
+                />
+                <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+            </div>
 
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+            <!-- Info Box -->
+            <div class="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <p class="text-blue-700 text-sm font-semibold">ℹ️ Pendaftaran Gratis</p>
+                <p class="text-blue-600 text-xs mt-2">Pendaftaran pembeli 100% gratis. Anda dapat langsung melihat dan memesan jajanan dari pedagang di sekitar Tasikmalaya.</p>
+            </div>
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
+            <!-- Submit Button -->
+            <x-primary-button class="w-full justify-center bg-orange-500 hover:bg-orange-600 py-3">
+                {{ __('Daftar Sekarang') }}
             </x-primary-button>
+        </form>
+
+        <!-- Divider -->
+        <div class="relative my-6">
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-gray-200"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+                <span class="px-2 bg-white text-gray-500">ATAU</span>
+            </div>
         </div>
-    </form>
+
+        <!-- Links -->
+        <div class="text-center space-y-4">
+            <p class="text-gray-600 text-sm">
+                Ingin daftar sebagai pedagang? 
+                <a href="{{ route('register-pedagang') }}" class="text-orange-500 hover:text-orange-600 font-bold">
+                    Klik di sini
+                </a>
+            </p>
+            <p class="text-gray-600 text-sm">
+                Sudah punya akun? 
+                <a href="{{ route('login') }}" class="text-orange-500 hover:text-orange-600 font-bold">
+                    Masuk di sini
+                </a>
+            </p>
+        </div>
+    </div>
 </x-guest-layout>
