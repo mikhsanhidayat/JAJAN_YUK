@@ -69,7 +69,7 @@
                         </div>
                         @empty
                         <div class="bg-white/10 backdrop-blur-md p-10 rounded-3xl w-full text-center text-white border border-white/10">
-                            Data jajanan belum tersedia di area ini.
+                            Data jajanan belum tersedia di area ini
                         </div>
                         @endforelse
                     </div>
