@@ -7,25 +7,34 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use App\Http\Controllers\Controller;
+// Import yang dibutuhkan untuk middleware Laravel 11
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class AdminVerifikasiPedagangController extends Controller
+class AdminVerifikasiPedagangController extends Controller implements HasMiddleware
 {
     /**
-     * Middleware: Hanya admin yang bisa akses
+     * Middleware: Menggantikan __construct di Laravel 11
+     * Menangani keamanan akses hanya untuk Admin yang sudah login.
      */
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware(['auth', 'verified']);
-        $this->middleware(function ($request, $next) {
-            if ($request->user()->role !== 'admin') {
-                abort(403, 'Anda tidak memiliki akses ke halaman ini.');
-            }
-            return $next($request);
-        });
+        return [
+            new Middleware('auth'),
+            new Middleware('verified'),
+            // Fungsi penengah untuk cek role admin secara langsung
+            function ($request, $next) {
+                if ($request->user()->role !== 'admin') {
+                    abort(403, 'Anda tidak memiliki akses ke halaman ini.');
+                }
+                return $next($request);
+            },
+        ];
     }
 
     /**
-     * Tampilkan list pedagang yang menunggu verifikasi
+     * Tampilkan list pedagang yang menunggu verifikasi dan yang sudah disetujui
      */
     public function index(): View
     {
@@ -41,17 +50,18 @@ class AdminVerifikasiPedagangController extends Controller
     }
 
     /**
-     * Tampilkan detail pedagang untuk verifikasi
+     * Tampilkan detail pedagang untuk verifikasi (cek foto bukti bayar, lokasi, dll)
      */
     public function show(Pedagang $pedagang): View
     {
+        // Hanya bisa verifikasi pedagang yang statusnya masih pending
         abort_if($pedagang->admin_status !== 'pending', 404);
 
         return view('admin.verifikasi-detail', compact('pedagang'));
     }
 
     /**
-     * Approve pedagang - ubah status menjadi approved dan paid
+     * Approve pedagang - Mengaktifkan toko agar muncul di peta JajanYuk
      */
     public function approve(Pedagang $pedagang): RedirectResponse
     {
@@ -60,7 +70,7 @@ class AdminVerifikasiPedagangController extends Controller
         $pedagang->update([
             'payment_status' => 'paid',
             'admin_status' => 'approved',
-            'is_active' => true, // Otomatis aktif
+            'is_active' => true, // Sekarang toko muncul di peta dashboard
         ]);
 
         return redirect()
@@ -69,17 +79,17 @@ class AdminVerifikasiPedagangController extends Controller
     }
 
     /**
-     * Reject pedagang dengan alasan
+     * Reject pedagang - Menolak dengan alasan tertentu
      */
     public function reject(Request $request, Pedagang $pedagang): RedirectResponse
     {
         abort_if($pedagang->admin_status !== 'pending', 403);
 
-        $validated = $request->validate([
+        $request->validate([
             'reject_reason' => ['required', 'string', 'max:500'],
         ]);
 
-        // Hapus file bukti pembayaran jika ditolak (opsional)
+        // Hapus file bukti pembayaran yang salah/palsu agar storage tidak penuh
         if ($pedagang->bukti_pembayaran && Storage::disk('public')->exists($pedagang->bukti_pembayaran)) {
             Storage::disk('public')->delete($pedagang->bukti_pembayaran);
         }
@@ -88,11 +98,8 @@ class AdminVerifikasiPedagangController extends Controller
             'payment_status' => 'pending',
             'admin_status' => 'rejected',
             'is_active' => false,
-            'bukti_pembayaran' => null, // Clear bukti pembayaran
+            'bukti_pembayaran' => null, 
         ]);
-
-        // Bisa add note/reason ke tabel notes atau kirim email ke pedagang
-        // Untuk sekarang cukup update status
 
         return redirect()
             ->route('admin.verifikasi.index')
@@ -100,7 +107,7 @@ class AdminVerifikasiPedagangController extends Controller
     }
 
     /**
-     * Deactivate pedagang yang sudah aktif
+     * Nonaktifkan pedagang (Banned atau tutup sementara)
      */
     public function deactivate(Pedagang $pedagang): RedirectResponse
     {
@@ -116,7 +123,7 @@ class AdminVerifikasiPedagangController extends Controller
     }
 
     /**
-     * Reactivate pedagang yang sudah dinonaktifkan
+     * Aktifkan kembali pedagang
      */
     public function reactivate(Pedagang $pedagang): RedirectResponse
     {

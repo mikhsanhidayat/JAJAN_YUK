@@ -7,10 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Pedagang extends Model
 {
     protected $fillable = [
-      'user_id', 'nama_toko', 'jenis_jajanan', 'is_active', 
-    'latitude', 'longitude', 'foto_gerobak', 
-    'payment_status', 'admin_status', 'bukti_pembayaran' // Tambahan
-    ];
+    'user_id',
+    'nama_toko',
+    'latitude',
+    'longitude',
+    'bukti_pembayaran',
+    'payment_status',
+    'admin_status',
+    'is_active'
+];
 
     public function user()
     {

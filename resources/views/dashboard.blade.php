@@ -7,6 +7,12 @@
                     <h1 class="text-[#ff6b35] font-black text-xl tracking-tight">JajanYuk</h1>
                     <p class="text-[10px] text-gray-500 font-medium uppercase tracking-widest">Tasikmalaya Street Food</p>
                 </div>
+
+                {{-- nama pengguna dan id_nya --}}
+                <div>
+                    <p class="text-sm font-semibold text-gray-700">{{ auth()->user()->nama ?? 'Guest' }}</p>
+                    <p class="text-xs text-gray-500">{{ auth()->user()->id ?? 'No ID' }}</p>
+                </div>
                 
                 <div class="flex items-center gap-3">
                     {{-- Show Login/Register for unauthenticated users --}}
@@ -21,12 +27,23 @@
 
                     {{-- Show Kelola Menu for pedagang --}}
                     @auth
-                        @if(Auth::user()->role == 'pedagang')
-                            <a href="{{ route('menu.index') }}" class="text-[10px] font-bold text-orange-500 border border-orange-500 px-3 py-1 rounded-full uppercase transition-all hover:bg-orange-500 hover:text-white">
+                        @if(auth()->user()->role === 'pedagang')
+                            <a href="{{ route('menu.index') }}" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition">
                                 Kelola Menu
                             </a>
                         @endif
                     @endauth
+                    
+
+                    {{-- button logout --}}
+                        @auth
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition">
+                                    Logout
+                                </button>
+                            </form>
+                        @endauth
 
                     <div class="p-2 bg-orange-50 rounded-full text-[#ff6b35]">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -15,17 +15,15 @@ class MenuController extends Controller
      */
     public function index()
     {
-        // Ambil data pedagang yang terikat dengan user login
+
+
         $pedagang = Pedagang::where('user_id', Auth::id())->first();
 
-        // Jika user bukan pedagang atau belum punya profil pedagang
-        if (!$pedagang) {
-            return redirect()->route('dashboard')->with('error', 'Anda belum terdaftar sebagai pedagang.');
-        }
-
-        $menus = Menu::where('pedagang_id', $pedagang->id)->latest()->get();
-
+     
+        
+        $menus = Menu::where('pedagang_id', $pedagang->id)->get();
         return view('menu.index', compact('menus'));
+       
     }
 
     /**
