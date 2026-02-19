@@ -8,9 +8,14 @@ use App\Models\Menu; // Tambahkan ini agar model Menu bisa dibaca
 // Route untuk halaman utama (Guest/Belum Login)
 // Contoh di web.php
 Route::get('/', function () {
-    $menus = \App\Models\Menu::with('pedagang')->get();
-    return view('dashboard', ['menus' => $menus]);
-});
+    // Ambil data menu yang pedagangnya aktif
+    $menus = Menu::with('pedagang')->whereHas('pedagang', function($q) {
+        $q->where('is_active', true);
+    })->get();
+
+    return view('dashboard', compact('menus'));
+})->name('home');   
+
 
 // Route untuk Dashboard (Setelah Login)
 Route::get('/dashboard', function () {

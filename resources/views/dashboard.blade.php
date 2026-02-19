@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout >
     <div class="relative h-screen w-full overflow-hidden bg-gray-50">
         
         <div class="absolute top-0 left-0 right-0 z-[1000] bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100">
