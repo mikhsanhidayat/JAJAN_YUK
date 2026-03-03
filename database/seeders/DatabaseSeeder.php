@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
 
         // 3. Menu dengan Foto Jajanan
         Menu::create([
-            'pedagang_id' => $pedagang->id,
+            'pedagang_id' => $pedagang->id, 
             'nama_produk' => 'Odading Spesial',
             'tipe_harga' => 'pas',
             'harga_minimal' => 5000,

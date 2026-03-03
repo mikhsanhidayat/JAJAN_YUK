@@ -7,6 +7,16 @@
                     <h1 class="text-[#ff6b35] font-black text-xl tracking-tight">JajanYuk</h1>
                     <p class="text-[10px] text-gray-500 font-medium uppercase tracking-widest">Tasikmalaya Street Food</p>
                 </div>
+                {{-- register --}}
+                <div class=" w-full flex items-center justify-end pr-9 ">
+                    <a href="{{ route('register') }}" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors">
+                        Daftar
+                    </a>
+                    <span class="mx-2 text-gray-400">|</span>
+                    <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-700 hover:text-orange-500 transition-colors">
+                        Masuk
+                    </a>
+                </div>
                 <div class="p-2 bg-orange-50 rounded-full text-[#ff6b35]">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
@@ -107,7 +117,7 @@
         
         /* Memastikan leaflet tidak menutupi UI kita */
         .leaflet-container { z-index: 0 !important; }
-        .leaflet-control-container { display: none; } /* Sembunyikan kontrol bawaan agar clean */
+        .leaflet-control-container { display: none; } /* Semkontrol bawaan agar clean */
         
         /* Custom Marker */
         .custom-div-icon { background: none !important; border: none !important; }

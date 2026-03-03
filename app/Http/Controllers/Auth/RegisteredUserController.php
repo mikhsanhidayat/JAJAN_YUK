@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pedagang;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+
 
 class RegisteredUserController extends Controller
 {
@@ -27,26 +30,35 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
+
     {
-       $request->validate([
-        'nama' => ['required', 'string', 'max:255'], // Sesuaikan ke 'nama'
-        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-        'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        // 'role' => ['required', 'in:pembeli,pedagang'], // Opsional jika ingin divalidasi
-    ]);
 
-    $user = User::create([
-        'nama' => $request->nama,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-        'role' => $request->role ?? 'pembeli', // Default ke pembeli jika belum ada input role di view
-    ]);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
 
-    event(new Registered($user));
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
 
-    Auth::login($user);
+        // Setelah user berhasil dibuat, buat profil pedagang untuk user tersebut
+        // Pedagang::create([
+        //     'user_id' => $user->id,
+        //     'nama_toko' => '', // Bisa diisi nanti di halaman profil
+        //     'lokasi' => '', // Bisa diisi nanti di halaman profil
+        //     'foto_toko' => '', // Bisa diisi nanti di halaman profil
+        // ]);
 
-    return redirect(route('dashboard', absolute: false));
+        event(new Registered($user));
+
+        Auth::login($user);
+
+        // return redirect(RouteServiceProvider::HOME);
+      
     }
 }
