@@ -14,35 +14,34 @@ return new class extends Migration
         // 1. Tabel Users (Disesuaikan untuk Lacak Jajan)
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('nama'); // Diubah dari 'name' ke 'nama'
+            $table->string('nama');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            
-            // Kolom tambahan untuk Role & Profil
-            $table->enum('role', ['pembeli', 'pedagang', 'admin'])->default('pembeli');
-            $table->string('foto_profil')->nullable();
-            
-            $table->rememberToken();
+            $table->enum('role', ['pedagang', 'admin','pembeli'])->default('pedagang'); // Role untuk membedakan jenis pengguna
+            $table->string('foto_profil')->nullable(); // Kolom untuk menyimpan path foto profil
             $table->timestamps();
         });
 
-        // 2. Tabel Password Reset (Bawaan Laravel)
+        // 2. Tabel Password Reset Tokens (Bawaan Laravel)  
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
+            $table->id();
+            $table->string('email')->index();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
-        // 3. Tabel Sessions (Penting agar tidak error 500)
+
+        // 3. Tabel Sessions (Bawaan Laravel)
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
-            $table->longText('payload');
+            $table->text('payload');
             $table->integer('last_activity')->index();
         });
+
+       
     }
 
     /**
@@ -54,4 +53,4 @@ return new class extends Migration
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }
-};
+}; 

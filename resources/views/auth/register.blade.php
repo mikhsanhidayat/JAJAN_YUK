@@ -31,7 +31,7 @@
                 <p class="text-[10px] text-gray-500 font-bold uppercase tracking-[0.2em] mt-1">Buat Akun Baru</p>
             </div>
 
-            <form method="POST" action="{{ route('register') }}" class="space-y-5">
+            <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" class="space-y-5">
                 @csrf
 
                 <div>
@@ -78,6 +78,14 @@
                                type="password" name="password_confirmation" required placeholder="••••••" />
                     </div>
                 </div>
+                {{-- kirim photo profile --}}
+                <div class="pt-4">
+                    <label for="foto_profil" class="block text-xs font-bold text-gray-700 uppercase tracking-wider ml-1 mb-1">Foto Profil</label>
+                    <input id="foto_profil" class="block w-full px-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-orange-500 transition-all text-sm shadow-sm" 
+                           type="file" name="foto_profil" accept="image/*" />
+                    <x-input-error :messages="$errors->get('foto_profil')" class="mt-1" />
+                </div>
+
                 <x-input-error :messages="$errors->get('password')" class="mt-1" />
                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-1" />
 

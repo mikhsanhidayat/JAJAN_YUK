@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\PedagangController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Menu; // Tambahkan ini agar model Menu bisa dibaca
+use Illuminate\Support\Facades\Route;
 
 // Route untuk halaman utama (Guest/Belum Login)
 // Contoh di web.php
@@ -32,6 +33,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/menu/create', [MenuController::class, 'create'])->name('menu.create');
     Route::post('/menu/store', [MenuController::class, 'store'])->name('menu.store');
     Route::get('/menu', [MenuController::class, 'index'])->name('menu.index');
+
+    // Route untuk halaman form pedagang
+    Route::get('/pedagang', [PedagangController::class, 'index'])->name('pedagang.index');
+    Route::post('/pedagang', [PedagangController::class, 'store'])->name('pedagang.store');
+
 });
 
 require __DIR__.'/auth.php';

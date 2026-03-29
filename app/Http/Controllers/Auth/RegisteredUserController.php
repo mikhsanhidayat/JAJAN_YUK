@@ -35,15 +35,19 @@ class RegisteredUserController extends Controller
     {
 
         $request->validate([
-            'name' => 'required|string|max:255',
+            'nama' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'role' => 'required|string|in:pedagang,admin,pembeli',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi untuk foto profil
         ]);
 
         $user = User::create([
-            'name' => $request->name,
+            'nama' => $request->nama,
             'email' => $request->email,
+            'role' => $request->role,
             'password' => Hash::make($request->password),
+            'foto_profil' => $request->hasFile('foto_profil') ? $request->file('foto_profil')->store('foto_profil', 'public') : null, // Simpan foto profil jika ada
         ]);
 
         // Setelah user berhasil dibuat, buat profil pedagang untuk user tersebut
@@ -58,7 +62,9 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        // return redirect(RouteServiceProvider::HOME);
+        return redirect('/dashboard');
+
+
       
     }
 }

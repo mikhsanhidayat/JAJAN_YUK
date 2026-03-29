@@ -58,5 +58,18 @@ class DatabaseSeeder extends Seeder
             'stok_status' => true,
             'foto_produk' => 'https://images.unsplash.com/photo-1613478223719-2ab802602423?q=80&w=400'
         ]);
+
+            // seed untuk role admin bisa ditambahkan di sini jika diperlukan
+             $user = User::create([
+            'nama' => 'admin',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('admin123'),
+            'role' => 'admin',
+        ]);
+            
     }
+
+
+
+
 }
