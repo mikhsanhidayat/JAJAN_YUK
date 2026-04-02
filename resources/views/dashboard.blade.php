@@ -60,8 +60,10 @@
 
                 @auth
                 <div class="flex items-center gap-4  ml-[1000px] ">
-                    {{-- daftar pedagang --}}
-                    <a href="{{ route('pedagang.index') }}" class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">Daftar Pedagang</a>
+                    {{-- daftar pedagang- hanya role pedagang yang boleh lihat dan tidak bisa di lihat oleh user selain pedagang dan mode tamu--}}
+                    @if(Auth::user()->Role === 'pedagang')
+                        <a href="{{ route('pedagang.index') }}" class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">Daftar Pedagang</a>
+                    @endif
                     <a href="{{ route('profile.edit') }}" class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">Profile</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

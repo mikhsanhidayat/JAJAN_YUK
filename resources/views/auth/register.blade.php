@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Daftar - JajanYuk</title>
 
-     <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="font-['Figtree']">
     
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-50 relative overflow-hidden">
         
@@ -39,7 +39,7 @@
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">👤</span>
                         <input id="nama" class="block w-full pl-11 pr-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-orange-500 transition-all text-sm shadow-sm" 
-                               type="text" name="nama" :value="old('nama')" required autofocus placeholder="Contoh: Budi Jajanan" />
+                               type="text" name="nama" value="{{ old('nama') }}" required autofocus placeholder="Contoh: Budi Jajanan" />
                     </div>
                     <x-input-error :messages="$errors->get('nama')" class="mt-2" />
                 </div>
@@ -49,7 +49,7 @@
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">✉️</span>
                         <input id="email" class="block w-full pl-11 pr-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-orange-500 transition-all text-sm shadow-sm" 
-                               type="email" name="email" :value="old('email')" required placeholder="email@anda.com" />
+                               type="email" name="email" value="{{ old('email') }}" required placeholder="email@anda.com" />
                     </div>
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                 </div>
@@ -69,29 +69,49 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label for="password" class="block text-xs font-bold text-gray-700 uppercase tracking-wider ml-1 mb-1">Password</label>
-                        <input id="password" class="block w-full px-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-orange-500 transition-all text-sm shadow-sm" 
-                               type="password" name="password" required autocomplete="new-password" placeholder="••••••" />
+                        <div class="relative group">
+                            <input id="password" class="block w-full px-4 pr-12 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-orange-500 transition-all text-sm shadow-sm" 
+                                   type="password" name="password" required autocomplete="new-password" placeholder="••••••" />
+                            
+                            <button type="button" onclick="toggleVisibility('password', 'eye-open-pass', 'eye-open-outer-pass', 'eye-closed-pass')" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-500 transition-colors focus:outline-none">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path id="eye-open-pass" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path id="eye-open-outer-pass" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    <path id="eye-closed-pass" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.076m3.313-3.313A9.959 9.959 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21m-2.105-2.105L12 12m0 0L3 3" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
+
                     <div>
                         <label for="password_confirmation" class="block text-xs font-bold text-gray-700 uppercase tracking-wider ml-1 mb-1">Konfirmasi</label>
-                        <input id="password_confirmation" class="block w-full px-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-orange-500 transition-all text-sm shadow-sm" 
-                               type="password" name="password_confirmation" required placeholder="••••••" />
+                        <div class="relative group">
+                            <input id="password_confirmation" class="block w-full px-4 pr-12 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-orange-500 transition-all text-sm shadow-sm" 
+                                   type="password" name="password_confirmation" required placeholder="••••••" />
+                            
+                            <button type="button" onclick="toggleVisibility('password_confirmation', 'eye-open-conf', 'eye-open-outer-conf', 'eye-closed-conf')" class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-500 transition-colors focus:outline-none">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path id="eye-open-conf" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path id="eye-open-outer-conf" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    <path id="eye-closed-conf" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.076m3.313-3.313A9.959 9.959 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21m-2.105-2.105L12 12m0 0L3 3" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
-                {{-- kirim photo profile --}}
-                <div class="pt-4">
+
+                <div class="pt-2">
                     <label for="foto_profil" class="block text-xs font-bold text-gray-700 uppercase tracking-wider ml-1 mb-1">Foto Profil</label>
-                    <input id="foto_profil" class="block w-full px-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-orange-500 transition-all text-sm shadow-sm" 
+                    <input id="foto_profil" class="block w-full px-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-orange-500 transition-all text-sm shadow-sm file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-orange-100 file:text-orange-700 hover:file:bg-orange-200" 
                            type="file" name="foto_profil" accept="image/*" />
                     <x-input-error :messages="$errors->get('foto_profil')" class="mt-1" />
                 </div>
 
                 <x-input-error :messages="$errors->get('password')" class="mt-1" />
-                <x-input-error :messages="$errors->get('password_confirmation')" class="mt-1" />
 
                 <div class="pt-4">
-                    <button type="submit" class="w-full bg-[#ff6b35] hover:bg-[#e85a2a] text-white font-bold py-4 rounded-2xl shadow-lg shadow-orange-200 transition-all transform active:scale-[0.98] mb-4">
-                        {{ __('DAFTAR SEKARANG') }}
+                    <button type="submit" class="w-full bg-[#ff6b35] hover:bg-[#e85a2a] text-white font-black py-4 rounded-2xl shadow-lg shadow-orange-200 transition-all transform active:scale-[0.98] mb-4 tracking-widest uppercase">
+                        DAFTAR SEKARANG
                     </button>
                     
                     <div class="text-center">
@@ -107,9 +127,30 @@
         </div>
 
         <p class="mt-8 text-[10px] text-gray-400 font-medium uppercase tracking-widest relative z-10">
-            &copy; 2024 JajanYuk - Tasikmalaya Street Food
+            &copy; 2026 JajanYuk - Tasikmalaya Street Food
         </p>
     </div>
+
+    <script>
+        function toggleVisibility(inputId, openId, outerId, closedId) {
+            const passwordInput = document.getElementById(inputId);
+            const eyeOpen = document.getElementById(openId);
+            const eyeOpenOuter = document.getElementById(outerId);
+            const eyeClosed = document.getElementById(closedId);
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeOpen.classList.add('hidden');
+                eyeOpenOuter.classList.add('hidden');
+                eyeClosed.classList.remove('hidden');
+            } else {
+                passwordInput.type = 'password';
+                eyeOpen.classList.remove('hidden');
+                eyeOpenOuter.classList.remove('hidden');
+                eyeClosed.classList.add('hidden');
+            }
+        }
+    </script>
 
 </body>
 </html>

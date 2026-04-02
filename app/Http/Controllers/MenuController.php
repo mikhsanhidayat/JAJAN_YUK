@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Menu;
 use App\Models\Pedagang;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -17,7 +18,7 @@ class MenuController extends Controller
     {
         // Ambil data pedagang yang terikat dengan user login
         $pedagang = Pedagang::where('user_id', Auth::id())->first();
-
+        $user = User::find(Auth::id());
         // Jika user bukan pedagang atau belum punya profil pedagang
         if (!$pedagang) {
             return redirect()->route('dashboard')->with('error', 'Anda belum terdaftar sebagai pedagang.');
@@ -25,7 +26,7 @@ class MenuController extends Controller
 
         $menus = Menu::where('pedagang_id', $pedagang->id)->latest()->get();
 
-        return view('menu.index', compact('menus'));
+        return view('menu.index', compact('menus', 'user'));
     }
 
     /**
