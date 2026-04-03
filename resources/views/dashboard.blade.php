@@ -42,9 +42,11 @@
                     <p class="text-[10px] text-gray-500 font-medium uppercase tracking-widest">Tasikmalaya Street Food</p>
                 </div>
                 {{-- name user tampil jika sudah login --}}
-                <div>
+                <div class="pl-4">
                     @auth
                         <span class="text-gray-700 text-sm font-medium">Halo, {{ Auth::user()->nama }}!</span>
+                        {{-- role --}}
+                        <span class="ml-2 text-xs font-bold text-gray-500 uppercase tracking-widest">({{ Auth::user()->role }})</span>
                     @endauth
                 </div>
                 
@@ -58,21 +60,33 @@
                 
                 @endguest
 
-                @auth
-                <div class="flex items-center gap-4  ml-[1000px] ">
-                    {{-- daftar pedagang- hanya role pedagang yang boleh lihat dan tidak bisa di lihat oleh user selain pedagang dan mode tamu--}}
-                    @if(Auth::user()->Role === 'pedagang')
-                        <a href="{{ route('pedagang.index') }}" class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">Daftar Pedagang</a>
-                    @endif
-                    <a href="{{ route('profile.edit') }}" class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">Profile</a>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transition-all active:scale-95">
-                            Logout
-                        </button>
-                    </form>
-                </div>
-                @endauth
+                {{-- Ganti bagian @auth di dalam navbar Anda dengan ini --}}
+@auth
+<div class="flex items-center gap-4 ml-auto">
+    {{-- Fitur Khusus Pedagang --}}
+    @if(auth()->user()->role === 'pedagang')
+        {{-- Tombol Daftar Pedagang --}}
+        <a href="{{ route('pedagang.index') }}" class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">
+            Daftar Pedagang
+        </a>
+
+        {{-- Tombol Verifikasi Akun --}}
+        <a href="{{ route('verifikasi.index') }}" class="bg-[#ff6b35] hover:bg-[#e85a2a] text-white font-bold py-2 px-4 rounded-full shadow-lg transition-all active:scale-95 text-sm">
+            Verifikasi Akun
+        </a>
+    @endif
+
+    {{-- Menu Umum (Bisa dilihat semua role yang login) --}}
+    <a href="{{ route('profile.edit') }}" class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">Profile</a>
+    
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transition-all active:scale-95">
+            Logout
+        </button>
+    </form>
+</div>
+@endauth
 
                
                 <div class="p-2 bg-orange-50 rounded-full text-[#ff6b35]">

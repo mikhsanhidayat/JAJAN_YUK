@@ -3,6 +3,7 @@
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PedagangController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VerifController;
 use App\Models\Menu; // Tambahkan ini agar model Menu bisa dibaca
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,10 @@ Route::middleware('auth')->group(function () {
     // Route untuk halaman form pedagang
     Route::get('/pedagang', [PedagangController::class, 'index'])->name('pedagang.index');
     Route::post('/pedagang', [PedagangController::class, 'store'])->name('pedagang.store');
+
+    // Route untuk halaman verifikasi
+    Route::get('/verifikasi', [VerifController::class, 'index'])->name('verifikasi.index');
+    Route::post('/verifikasi', [VerifController::class, 'store'])->name('verifikasi.store');
 
 });
 

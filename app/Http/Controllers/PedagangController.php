@@ -12,6 +12,10 @@ class PedagangController extends Controller
 {
     public function index()
     {
+        if (!Auth::check() || strtolower(Auth::user()->role) !== 'pedagang') {
+            return redirect()->route('dashboard')->with('error', 'Akses ditolak: hanya pedagang yang dapat melihat halaman ini.');
+        }
+
         $pedagangs = Pedagang::all();
         // Sesuaikan path view dengan struktur folder Anda
         return view('page.form_pedagang.index', compact('pedagangs'));
