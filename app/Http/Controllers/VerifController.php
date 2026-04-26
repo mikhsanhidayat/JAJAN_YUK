@@ -2,16 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pedagang;
 use App\Models\Verif; // Pastikan model ini ada
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class VerifController extends Controller
 {
-    public function index()
+   public function index()
+{
+    // Mengambil data verif beserta data user dan data pedagang terkait
+    $verifikasi = \App\Models\Verif::with(['user.pedagang'])->latest()->get();
+
+    return view('page.form_verification.index', compact('verifikasi'));
+}
+    public function create()
     {
-        // Tampilkan halaman verifikasi
-        return view('page.form_verification.index');
+        // Tampilkan form untuk mengunggah bukti transfer
+        return view('page.form_verification.create');
     }
 
     public function store(Request $request)
@@ -34,4 +42,27 @@ class VerifController extends Controller
 
         return redirect()->route('dashboard')->with('success', 'Bukti transfer berhasil diunggah!');
     }
+
+    public function approve($id)
+{
+    // 1. Cari data verifikasi berdasarkan ID
+    $verif = Verif::findOrFail($id);
+
+    // 2. Cari data pedagang milik user tersebut
+    $pedagang = Pedagang::where('user_id', $verif->user_id)->first();
+
+    if ($pedagang) {
+        // 3. Ubah status menjadi true
+        $pedagang->update([
+            'is_active' => true
+        ]);
+
+        // 4. Hapus data verifikasi (karena sudah disetujui)
+        $verif->delete();
+
+        return redirect()->back()->with('success', 'Pedagang berhasil diverifikasi dan kini telah Aktif!');
+    }
+
+    return redirect()->back()->with('error', 'Data pedagang tidak ditemukan.');
+}
 }

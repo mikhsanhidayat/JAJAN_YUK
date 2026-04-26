@@ -1,98 +1,115 @@
-<!DOCTYPE html>
-<html lang="id">
+<x-app-layout>
+    <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Verifikasi Pembayaran - JajanYuk</title>
-
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,900&display=swap" rel="stylesheet" />
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-
-<body class="font-['Figtree'] bg-gray-50">
-
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 relative overflow-hidden px-4">
-
-        <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-            <div class="absolute top-[-5%] right-[-5%] w-[50%] h-[50%] bg-orange-400 rounded-full blur-[120px]"></div>
-            <div class="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-orange-600 rounded-full blur-[120px]">
-            </div>
-        </div>
-
-        <div
-            class="w-full sm:max-w-md bg-white/80 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.08)] border border-white/40 overflow-hidden rounded-[3rem] relative z-10 p-10">
-
-            <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-orange-100 rounded-3xl mb-4">
-                    <span class="text-3xl">🧾</span>
-                </div>
-                <h1 class="text-[#ff6b35] font-black text-2xl tracking-tight uppercase">Verifikasi Akun</h1>
-                <p class="text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mt-2">Unggah Bukti Transfer
-                    Anda</p>
-            </div>
-
-            <x-auth-session-status class="mb-4" :status="session('status')" />
-
-            <form method="POST" action="{{ route('verifikasi.store') }}" enctype="multipart/form-data" class="space-y-6">
-                @csrf
-
-                <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-
-                <div class="bg-orange-50/50 border border-orange-100 rounded-2xl p-4 mb-6">
-                    <div class="flex items-start gap-3">
-                        <span class="text-orange-500">💡</span>
-                        <div class="text-[11px] text-orange-800 leading-relaxed font-medium">
-                            Akun: <span class="font-black">{{ auth()->user()->nama }}</span> (ID:
-                            {{ auth()->user()->id }}) <br>
-                            Unggah bukti transfer untuk memulai proses verifikasi.
-                        </div>
-                    </div>
-                </div>
-
+            <div class="mb-8 flex justify-between items-end">
                 <div>
-                    <label for="bukti_transfer"
-                        class="block text-xs font-black text-gray-400 uppercase tracking-wider ml-2 mb-2">Upload Bukti
-                        Transfer</label>
-                    <div class="relative group">
-                        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-xl">
-                            📸
-                        </div>
-                        <input id="bukti_transfer" type="file" name="bukti_transfer" accept="image/*" required
-                            class="block w-full pl-14 pr-4 py-4 bg-gray-50/50 border-2 border-dashed border-gray-200 rounded-[2rem] text-sm text-gray-500
-                          file:mr-4 file:py-2 file:px-4
-                          file:rounded-full file:border-0
-                          file:text-xs file:font-black
-                          file:bg-orange-50 file:text-orange-600
-                          hover:file:bg-orange-100
-                          focus:outline-none focus:border-orange-500 transition-all cursor-pointer" />
-                    </div>
-                    <x-input-error :messages="$errors->get('bukti_transfer')" class="mt-2 ml-2" />
+                    <h2 class="text-[#ff6b35] font-black text-3xl tracking-tight uppercase">Panel Verifikasi</h2>
+                    <p class="text-xs text-gray-400 font-bold uppercase tracking-[0.2em] mt-1">Konfirmasi Pembayaran
+                        Pedagang</p>
                 </div>
-
-                <div class="pt-4">
-                    <button type="submit"
-                        class="w-full bg-[#ff6b35] hover:bg-[#e85a2a] text-white font-black py-4 rounded-[2rem] shadow-lg shadow-orange-200 transition-all transform active:scale-[0.98] tracking-widest uppercase text-sm">
-                        Kirim Verifikasi
-                    </button>
-
-                    <a href="{{ url('/') }}"
-                        class="block text-center mt-6 text-[10px] text-gray-400 font-bold uppercase tracking-widest hover:text-orange-500 transition-colors">
-                        Kembali Ke Beranda
-                    </a>
+                <div class="bg-white px-4 py-2 rounded-2xl shadow-sm border border-gray-100">
+                    <span class="text-sm font-bold text-gray-600">Total Pengajuan: </span>
+                    <span class="text-sm font-black text-[#ff6b35]">{{ $verifikasi->count() }}</span>
                 </div>
-            </form>
+            </div>
+
+            <div
+                class="bg-white/80 backdrop-blur-xl rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-white overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-orange-50/50">
+                                <th class="px-6 py-5 text-[10px] font-black text-orange-600 uppercase tracking-widest">
+                                    Pedagang</th>
+                                <th class="px-6 py-5 text-[10px] font-black text-orange-600 uppercase tracking-widest">
+                                    Toko</th>
+                                <th class="px-6 py-5 text-[10px] font-black text-orange-600 uppercase tracking-widest">
+                                    Status Aktif</th>
+                                <th class="px-6 py-5 text-[10px] font-black text-orange-600 uppercase tracking-widest">
+                                    Bukti Transfer</th>
+                                <th
+                                    class="px-6 py-5 text-[10px] font-black text-orange-600 uppercase tracking-widest text-center">
+                                    Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            @foreach ($verifikasi as $item)
+                                <tr class="hover:bg-orange-50/20 transition-colors">
+                                    <td class="px-6 py-5">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-10 h-10 bg-gray-200 rounded-full overflow-hidden border-2 border-white shadow-sm">
+                                                <img src="{{ $item->user->foto_profil ? asset('storage/' . $item->user->foto_profil) : 'https://ui-avatars.com/api/?name=' . urlencode($item->user->nama) }}"
+                                                    class="w-full h-full object-cover">
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-black text-gray-800">{{ $item->user->nama }}</p>
+                                                <p class="text-[10px] text-gray-400 font-medium">
+                                                    {{ $item->user->email }}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-5">
+                                        <span class="text-sm font-bold text-gray-600">
+                                            {{ $item->user->pedagang->nama_toko ?? 'Belum Daftar Toko' }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-5">
+                                        @if ($item->user->pedagang && $item->user->pedagang->is_active)
+                                            <span
+                                                class="inline-flex items-center px-3 py-1 rounded-full text-[9px] font-black uppercase bg-green-100 text-green-600 tracking-wider">
+                                                ● Aktif
+                                            </span>
+                                        @else
+                                            <span
+                                                class="inline-flex items-center px-3 py-1 rounded-full text-[9px] font-black uppercase bg-red-100 text-red-600 tracking-wider">
+                                                ● Non-Aktif
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-5">
+                                        <a href="{{ asset($item->bukti_transfer) }}" target="_blank"
+                                            class="group flex items-center gap-2 text-[#ff6b35] hover:text-orange-700 transition-all">
+                                            <div
+                                                class="p-2 bg-orange-100 rounded-lg group-hover:scale-110 transition-transform">
+                                                📸
+                                            </div>
+                                            <span class="text-[11px] font-black uppercase">Lihat Foto</span>
+                                        </a>
+                                    </td>
+                                    <td class="px-6 py-5 text-center">
+                                        <form action="{{ route('verifikasi.approve', $item->id) }}" method="POST"
+                                            onsubmit="return confirm('Apakah Anda yakin ingin memverifikasi pedagang ini?')">
+                                            @csrf
+                                            <button type="submit"
+                                                class="bg-[#ff6b35] hover:bg-[#e85a2a] text-white text-[10px] font-black px-4 py-2 rounded-xl shadow-md shadow-orange-100 transition-all active:scale-95 uppercase">
+                                                Verifikasi Sekarang
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+
+                            @if ($verifikasi->isEmpty())
+                                <tr>
+                                    <td colspan="5" class="px-6 py-20 text-center">
+                                        <div class="flex flex-col items-center">
+                                            <span class="text-4xl mb-4">📥</span>
+                                            <p class="text-gray-400 font-bold uppercase text-[10px] tracking-[0.2em]">
+                                                Belum ada data verifikasi masuk</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <p class="mt-8 text-center text-[10px] text-gray-400 font-bold uppercase tracking-[0.3em]">
+                Administrator System JajanYuk v1.0
+            </p>
         </div>
-
-        <p class="mt-8 text-[10px] text-gray-400 font-bold uppercase tracking-[0.3em] relative z-10">
-            © 2026 JAJANYUK - TASIKMALAYA STREET FOOD
-        </p>
     </div>
-
-</body>
-
-</html>
+</x-app-layout>

@@ -1,97 +1,150 @@
 <x-app-layout>
 
-    @if(session('success'))
-<div id="alert-success" class="mb-6 flex items-center p-4 bg-green-50 border-l-4 border-green-500 rounded-2xl shadow-sm animate-bounce">
-    <div class="flex-shrink-0 text-green-500">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-        </svg>
-    </div>
-    <div class="ml-3">
-        <p class="text-xs font-bold text-green-800 uppercase tracking-tight">{{ session('success') }}</p>
-    </div>
-    <button onclick="document.getElementById('alert-success').remove()" class="ml-auto text-green-500 hover:text-green-700">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-    </button>
-</div>
-@endif
+    @if (session('success'))
+        <div id="alert-success"
+            class="mb-6 flex items-center p-4 bg-green-50 border-l-4 border-green-500 rounded-2xl shadow-sm animate-bounce">
+            <div class="flex-shrink-0 text-green-500">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-xs font-bold text-green-800 uppercase tracking-tight">{{ session('success') }}</p>
+            </div>
+            <button onclick="document.getElementById('alert-success').remove()"
+                class="ml-auto text-green-500 hover:text-green-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    @endif
 
-@if(session('error'))
-<div id="alert-error" class="mb-6 flex items-center p-4 bg-red-50 border-l-4 border-red-500 rounded-2xl shadow-sm">
-    <div class="flex-shrink-0 text-red-500">
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-        </svg>
-    </div>
-    <div class="ml-3">
-        <p class="text-xs font-bold text-red-800 uppercase tracking-tight">{{ session('error') }}</p>
-    </div>
-    <button onclick="document.getElementById('alert-error').remove()" class="ml-auto text-red-500 hover:text-red-700">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-    </button>
-</div>
-@endif
+    @if (session('error'))
+        <div id="alert-error"
+            class="mb-6 flex items-center p-4 bg-red-50 border-l-4 border-red-500 rounded-2xl shadow-sm">
+            <div class="flex-shrink-0 text-red-500">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p class="text-xs font-bold text-red-800 uppercase tracking-tight">{{ session('error') }}</p>
+            </div>
+            <button onclick="document.getElementById('alert-error').remove()"
+                class="ml-auto text-red-500 hover:text-red-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    @endif
 
 
     <div class="relative h-screen w-full overflow-hidden bg-gray-50">
-        
-        <div class="absolute top-0 left-0 right-0 z-[1000] bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100">
+
+        <div
+            class="absolute top-0 left-0 right-0 z-[1000] bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100">
             <div class="flex items-center justify-between px-6 py-3">
                 <div>
                     <h1 class="text-[#ff6b35] font-black text-xl tracking-tight">JajanYuk</h1>
-                    <p class="text-[10px] text-gray-500 font-medium uppercase tracking-widest">Tasikmalaya Street Food</p>
+                    <p class="text-[10px] text-gray-500 font-medium uppercase tracking-widest">Tasikmalaya Street Food
+                    </p>
                 </div>
-                {{-- name user tampil jika sudah login --}}
+                {{-- name use   r tampil jika sudah login --}}
                 <div class="pl-4">
                     @auth
                         <span class="text-gray-700 text-sm font-medium">Halo, {{ Auth::user()->nama }}!</span>
                         {{-- role --}}
-                        <span class="ml-2 text-xs font-bold text-gray-500 uppercase tracking-widest">({{ Auth::user()->role }})</span>
+                        <span
+                            class="ml-2 text-xs font-bold text-gray-500 uppercase tracking-widest">({{ Auth::user()->role }})</span>
                     @endauth
                 </div>
-                
+
                 {{-- register and login ada jika belum ada user yang masuk --}}
                 @guest
-                <div class="flex items-center gap-4 ml-[1000px]     ">
-                    <a href="{{ route('login') }}" class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">Login</a>
-                    <a href="{{ route('register') }}" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transition-all active:scale-95">Register</a>
-                </div>
-                {{-- logout --}}
-                
+                    <div class="flex items-center gap-4 ml-[1000px]     ">
+                        <a href="{{ route('login') }}"
+                            class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">Login</a>
+                        <a href="{{ route('register') }}"
+                            class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transition-all active:scale-95">Register</a>
+                    </div>
+                    {{-- logout --}}
+
                 @endguest
 
-                {{-- Ganti bagian @auth di dalam navbar Anda dengan ini --}}
-@auth
-<div class="flex items-center gap-4 ml-auto">
-    {{-- Fitur Khusus Pedagang --}}
-    @if(auth()->user()->role === 'pedagang')
-        {{-- Tombol Daftar Pedagang --}}
-        <a href="{{ route('pedagang.index') }}" class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">
-            Daftar Pedagang
-        </a>
+                <div class="flex items-center space-x-3 bg-white px-4 py-2 rounded-2xl shadow-sm border border-orange-100">
+    <div class="text-right">
+        <p id="gps-text" class="text-[10px] font-black {{ auth()->user()->pedagangAktif() ? 'text-green-500' : 'text-red-500' }} uppercase tracking-widest">{{ auth()->user()->pedagangAktif() ? 'ONLINE' : 'OFFLINE' }}</p>
+        <p class="text-[9px] text-gray-400 font-bold uppercase">Status Jualan</p>
+    </div>
 
-        {{-- Tombol Verifikasi Akun --}}
-        <a href="{{ route('verifikasi.index') }}" class="bg-[#ff6b35] hover:bg-[#e85a2a] text-white font-bold py-2 px-4 rounded-full shadow-lg transition-all active:scale-95 text-sm">
-            Verifikasi Akun
-        </a>
-    @endif
-
-    {{-- Menu Umum (Bisa dilihat semua role yang login) --}}
-    <a href="{{ route('profile.edit') }}" class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">Profile</a>
-    
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transition-all active:scale-95">
-            Logout
-        </button>
-    </form>
+    <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" id="gps-switch" class="sr-only peer" {{ auth()->user()->pedagangAktif() ? 'checked' : '' }}>
+        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
+    </label>
 </div>
-@endauth
 
-               
+                {{-- Ganti bagian @auth di dalam navbar Anda dengan ini --}}
+                @auth
+                    <div class="flex items-center gap-4 ml-auto">
+                        {{-- Fitur Khusus Pedagang --}}
+                        @if (auth()->user()->role === 'pedagang')
+                            {{-- Tombol Daftar Pedagang (Hanya tampil jika belum menjadi pedagang) --}}
+                            @if (!auth()->user()->sudahMenjadiPedagang())
+                                <a href="{{ route('pedagang.index') }}"
+                                    class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">
+                                    Daftar Pedagang
+                                </a>
+                            @endif
+
+                            {{-- Tombol menu --}}
+                            <a href="{{ route('menu.index') }}"
+                                class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">
+                                Menu
+                            </a>
+
+                            {{-- Tombol Verifikasi Akun (Hanya tampil jika pedagang belum aktif) --}}
+                            @if (!auth()->user()->pedagangAktif())
+                                <a href="{{ route('verifikasi.create') }}"
+                                    class="bg-[#ff6b35] hover:bg-[#e85a2a] text-white font-bold py-2 px-4 rounded-full shadow-lg transition-all active:scale-95 text-sm">
+                                    Verifikasi Akun
+                                </a>
+                            @endif
+                        @endif
+                        {{-- link menu verifikasi yang hanya bisa dilihat oleh admin --}}
+                        @if (auth()->user()->role === 'admin')
+                            <a href="{{ route('verifikasi.index') }}"
+                                class="bg-[#ff6b35] hover:bg-[#e85a2a] text-white font-bold py-2 px-4 rounded-full shadow-lg transition-all active:scale-95 text-sm">
+                                Verifikasi
+                            </a>
+                        @endif
+                        {{-- Menu Umum (Bisa dilihat semua role yang login) --}}
+                        <a href="{{ route('profile.edit') }}"
+                            class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">Profile</a>
+
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"
+                                class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transition-all active:scale-95">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                @endauth
+
+
                 <div class="p-2 bg-orange-50 rounded-full text-[#ff6b35]">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h7" />
                     </svg>
                 </div>
             </div>
@@ -99,97 +152,245 @@
 
         <div id="map" class="absolute inset-0 z-0"></div>
 
-        <button class="absolute top-24 right-4 z-[1000] bg-white p-3 rounded-full shadow-xl text-gray-700 hover:text-orange-500 transition-all active:scale-90">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+        <button
+            class="absolute top-24 right-4 z-[1000] bg-white p-3 rounded-full shadow-xl text-gray-700 hover:text-orange-500 transition-all active:scale-90">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
             </svg>
         </button>
 
-        <div class="absolute bottom-0 left-0 right-0 z-[1000] bg-gradient-to-t from-black/80 via-black/40 to-transparent pt-12 pb-4 px-4">
-    <div class="max-w-5xl mx-auto space-y-4">
-        
-        <div class="relative max-w-lg mx-auto group">
-            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-orange-500 transition-colors text-sm">
-                🔍
-            </span>
-            <input type="text" placeholder="Cari jajanan..." 
-                class="w-full pl-11 pr-4 py-2.5 rounded-full border-none shadow-xl focus:ring-2 focus:ring-orange-500 text-xs bg-white/95 backdrop-blur-sm">
-        </div>
+        <div
+            class="absolute bottom-0 left-0 right-0 z-[1000] bg-gradient-to-t from-black/80 via-black/40 to-transparent pt-12 pb-4 px-4">
+            <div class="max-w-5xl mx-auto space-y-4">
 
-        <div class="space-y-3">
-            <div class="flex items-center justify-between px-1">
-                <h3 class="text-white font-bold text-base shadow-sm">Top Rated Street Food</h3>
-                <button class="text-white/80 text-[10px] font-semibold hover:text-white underline decoration-orange-500 underline-offset-4">Lihat Semua</button>
-            </div>
+                <div class="relative max-w-lg mx-auto group">
+                    <span
+                        class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-orange-500 transition-colors text-sm">
+                        🔍
+                    </span>
+                    <input type="text" placeholder="Cari jajanan..."
+                        class="w-full pl-11 pr-4 py-2.5 rounded-full border-none shadow-xl focus:ring-2 focus:ring-orange-500 text-xs bg-white/95 backdrop-blur-sm">
+                </div>
 
-            <div class="gap-3 overflow-x-auto pb-3 no-scrollbar flex justify-center scroll-smooth">
-                @forelse($menus ?? [] as $menu)
-                <div class="min-w-[220px] bg-white rounded-[1.5rem] shadow-xl overflow-hidden group cursor-pointer border border-white/20 transition-transform hover:scale-[1.02]">
-                    <div class="relative h-32 overflow-hidden">
-                        <img src="{{ Str::startsWith($menu->foto_produk, 'http') ? $menu->foto_produk : asset('storage/' . $menu->foto_produk) }}" 
-                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                        <div class="absolute top-2 right-2 bg-orange-500/90 backdrop-blur-sm text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow-lg">
-                            ★ 4.8
-                        </div>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between px-1">
+                        <h3 class="text-white font-bold text-base shadow-sm">Top Rated Street Food</h3>
+                        <button
+                            class="text-white/80 text-[10px] font-semibold hover:text-white underline decoration-orange-500 underline-offset-4">Lihat
+                            Semua</button>
                     </div>
 
-                    <div class="p-3">
-                        <h4 class="font-bold text-gray-800 text-sm truncate">{{ $menu->nama_produk }}</h4>
-                        <p class="text-gray-400 text-[10px] font-medium mb-3">{{ $menu->pedagang->nama_toko }}</p>
-                        
-                        <div class="flex justify-between items-center border-t border-gray-50 pt-2">
-                            <span class="text-orange-600 font-black text-base">
-                                <small class="text-[9px] font-normal text-gray-400">Rp</small> 
-                                {{ number_format($menu->harga_minimal, 0, ',', '.') }}
-                            </span>
-                            <button class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1.5 rounded-lg text-[9px] font-bold shadow-md shadow-orange-200 transition-all active:scale-90 uppercase">
-                                Order
-                            </button>
-                        </div>
+                    <div class="gap-3 overflow-x-auto pb-3 no-scrollbar flex justify-center scroll-smooth">
+                        @forelse($menus ?? [] as $menu)
+                            <div
+                                class="min-w-[220px] bg-white rounded-[1.5rem] shadow-xl overflow-hidden group cursor-pointer border border-white/20 transition-transform hover:scale-[1.02]">
+                                <div class="relative h-32 overflow-hidden">
+                                    <img src="{{ Str::startsWith($menu->foto_produk, 'http') ? $menu->foto_produk : asset('storage/' . $menu->foto_produk) }}"
+                                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                                    <div
+                                        class="absolute top-2 right-2 bg-orange-500/90 backdrop-blur-sm text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow-lg">
+                                        ★ 4.8
+                                    </div>
+                                </div>
+
+                                <div class="p-3">
+                                    <h4 class="font-bold text-gray-800 text-sm truncate">{{ $menu->nama_produk }}</h4>
+                                    <p class="text-gray-400 text-[10px] font-medium mb-3">
+                                        {{ $menu->pedagang->nama_toko }}</p>
+
+                                    <div class="flex justify-between items-center border-t border-gray-50 pt-2">
+                                        <span class="text-orange-600 font-black text-base">
+                                            <small class="text-[9px] font-normal text-gray-400">Rp</small>
+                                            {{ number_format($menu->harga_minimal, 0, ',', '.') }}
+                                        </span>
+                                        <button
+                                            class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1.5 rounded-lg text-[9px] font-bold shadow-md shadow-orange-200 transition-all active:scale-90 uppercase">
+                                            Order
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <div
+                                class="bg-white/10 backdrop-blur-md p-6 rounded-2xl w-full text-center text-white border border-white/10 text-xs">
+                                Data jajanan belum tersedia
+                            </div>
+                        @endforelse
                     </div>
                 </div>
-                @empty
-                <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl w-full text-center text-white border border-white/10 text-xs">
-                    Data jajanan belum tersedia
-                </div>
-                @endforelse
             </div>
         </div>
-    </div>
-</div>
 
     </div>
 
     <script>
+        let map;
+        let markers = []; // Array untuk menyimpan markers
+
         document.addEventListener('DOMContentLoaded', function() {
-            var map = L.map('map', { zoomControl: false }).setView([-7.3274, 108.2207], 15);
+            // Initialize map
+            map = L.map('map', {
+                zoomControl: false
+            }).setView([-7.3274, 108.2207], 15);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-            @foreach ($menus->unique('pedagang_id') as $m)
-                var customIcon = L.divIcon({
-                    className: 'custom-div-icon',
-                    html: "<div class='bg-orange-500 p-2 rounded-full border-2 border-white shadow-xl text-xl flex items-center justify-center animate-bounce'>🍢</div>",
-                    iconSize: [42, 42],
-                    iconAnchor: [21, 42]
-                });
-
-                L.marker([{{ $m->pedagang->latitude }}, {{ $m->pedagang->longitude }}], { icon: customIcon })
-                    .addTo(map)
-                    .bindPopup("<div class='p-2'><b>{{ $m->pedagang->nama_toko }}</b></div>");
-            @endforeach
+            // Load initial map data
+            loadMapData();
         });
+
+        // Fungsi untuk load ulang data peta secara real-time
+        function loadMapData() {
+            // Hapus semua markers yang ada
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+
+            // Fetch data pedagang aktif dari server
+            fetch('/api/pedagang-aktif')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(pedagang => {
+                        if (pedagang.latitude && pedagang.longitude) {
+                            var customIcon = L.divIcon({
+                                className: 'custom-div-icon',
+                                html: "<div class='bg-orange-500 p-2 rounded-full border-2 border-white shadow-xl text-xl flex items-center justify-center animate-bounce'>🍢</div>",
+                                iconSize: [42, 42],
+                                iconAnchor: [21, 42]
+                            });
+
+                            var marker = L.marker([pedagang.latitude, pedagang.longitude], {
+                                    icon: customIcon
+                                })
+                                .addTo(map)
+                                .bindPopup(`<div class='p-2'><b>${pedagang.nama_toko}</b><br><small>${pedagang.jenis_jajanan}</small></div>`);
+
+                            markers.push(marker);
+                        }
+                    });
+                })
+                .catch(error => console.error('Error loading map data:', error));
+        }
+
+        let watchId = null;
+
+        document.getElementById('gps-switch').addEventListener('change', function() {
+            if(this.checked) {
+                startTracking();
+            } else {
+                stopTracking();
+            }
+        });
+
+        function startTracking() {
+            if (!navigator.geolocation) {
+                alert("GPS tidak didukung!");
+                document.getElementById('gps-switch').checked = false;
+                return;
+            }
+
+            // 1. Ubah UI Instan
+            updateUI(true);
+
+            // 2. Mulai Pantau Pergerakan
+            watchId = navigator.geolocation.watchPosition(
+                (position) => {
+                    const coords = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        is_active: 1
+                    };
+
+                    // 3. Kirim ke Database
+                    axios.post('/update-lokasi-pedagang', coords)
+                        .then(res => {
+                            console.log("Lokasi terupdate di server");
+                            // 4. Re-render map secara real-time
+                            loadMapData();
+                        })
+                        .catch(err => {
+                            console.error("Gagal sinkron lokasi:", err);
+                            // Jika gagal, matikan tracking
+                            document.getElementById('gps-switch').checked = false;
+                            updateUI(false);
+                            alert("Gagal mengupdate lokasi. Silakan coba lagi.");
+                        });
+                },
+                (error) => {
+                    console.error("GPS Error:", error);
+                    document.getElementById('gps-switch').checked = false;
+                    updateUI(false);
+                    alert("Gagal mengambil lokasi. Pastikan GPS aktif dan beri izin akses lokasi.");
+                },
+                {
+                    enableHighAccuracy: true,
+                    maximumAge: 30000, // Cache lokasi maksimal 30 detik
+                    timeout: 27000 // Timeout 27 detik
+                }
+            );
+        }
+
+        function stopTracking() {
+            // 1. Stop GPS tracking
+            if (watchId) {
+                navigator.geolocation.clearWatch(watchId);
+                watchId = null;
+            }
+
+            // 2. Kirim status OFF ke server
+            axios.post('/update-lokasi-pedagang', {
+                is_active: 0,
+                latitude: null,
+                longitude: null
+            }).then(() => {
+                updateUI(false);
+                console.log("Status: Offline (Lokasi dihapus)");
+                // 3. Re-render map agar marker pedagang hilang
+                loadMapData();
+            }).catch(err => {
+                console.error("Gagal update status offline:", err);
+                alert("Gagal mematikan tracking. Silakan refresh halaman.");
+            });
+        }
+
+        function updateUI(isActive) {
+            const text = document.getElementById('gps-text');
+            if(isActive) {
+                text.innerText = "ONLINE";
+                text.classList.replace('text-red-500', 'text-green-500');
+            } else {
+                text.innerText = "OFFLINE";
+                text.classList.replace('text-green-500', 'text-red-500');
+            }
+        }
     </script>
 
     <style>
         /* Menghilangkan scrollbar tapi tetap bisa di-scroll */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
         /* Memastikan leaflet tidak menutupi UI kita */
-        .leaflet-container { z-index: 0 !important; }
-        .leaflet-control-container { display: none; } /* Semkontrol bawaan agar clean */
-        
+        .leaflet-container {
+            z-index: 0 !important;
+        }
+
+        .leaflet-control-container {
+            display: none;
+        }
+
+        /* Semkontrol bawaan agar clean */
+
         /* Custom Marker */
-        .custom-div-icon { background: none !important; border: none !important; }
+        .custom-div-icon {
+            background: none !important;
+            border: none !important;
+        }
     </style>
 </x-app-layout>

@@ -47,4 +47,35 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Relasi ke Pedagang
+     * User bisa punya satu record pedagang
+     */
+    public function pedagang()
+    {
+        return $this->hasOne(Pedagang::class);
+    }
+
+    /**
+     * Cek apakah user sudah terdaftar sebagai pedagang
+     * @return bool
+     */
+    public function sudahMenjadiPedagang()
+    {
+        return $this->pedagang()->exists();
+    }
+
+    /**
+     * Cek apakah pedagang sudah aktif (is_active = 1)
+     * @return bool
+     */
+    public function pedagangAktif()
+    {
+        return $this->pedagang && $this->pedagang->is_active == 1;
+    }
+
+    public function hasRole($role) {
+    return $this->role === $role; // Sesuaikan dengan nama kolom role di tabel user Anda
+    }   
 }
