@@ -57,46 +57,53 @@
                     <p class="text-[10px] text-gray-500 font-medium uppercase tracking-widest">Tasikmalaya Street Food
                     </p>
                 </div>
-                {{-- name use   r tampil jika sudah login --}}
+
                 <div class="pl-4">
                     @auth
                         <span class="text-gray-700 text-sm font-medium">Halo, {{ Auth::user()->nama }}!</span>
-                        {{-- role --}}
                         <span
                             class="ml-2 text-xs font-bold text-gray-500 uppercase tracking-widest">({{ Auth::user()->role }})</span>
                     @endauth
                 </div>
 
-                {{-- register and login ada jika belum ada user yang masuk --}}
                 @guest
-                    <div class="flex items-center gap-4 ml-[1000px]     ">
+                    <div class="flex items-center gap-4 ml-auto">
                         <a href="{{ route('login') }}"
                             class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">Login</a>
                         <a href="{{ route('register') }}"
                             class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg transition-all active:scale-95">Register</a>
                     </div>
-                    {{-- logout --}}
-
                 @endguest
 
-                <div class="flex items-center space-x-3 bg-white px-4 py-2 rounded-2xl shadow-sm border border-orange-100">
-    <div class="text-right">
-        <p id="gps-text" class="text-[10px] font-black {{ auth()->user()->pedagangAktif() ? 'text-green-500' : 'text-red-500' }} uppercase tracking-widest">{{ auth()->user()->pedagangAktif() ? 'ONLINE' : 'OFFLINE' }}</p>
-        <p class="text-[9px] text-gray-400 font-bold uppercase">Status Jualan</p>
-    </div>
-
-    <label class="relative inline-flex items-center cursor-pointer">
-        <input type="checkbox" id="gps-switch" class="sr-only peer" {{ auth()->user()->pedagangAktif() ? 'checked' : '' }}>
-        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
-    </label>
-</div>
-
-                {{-- Ganti bagian @auth di dalam navbar Anda dengan ini --}}
                 @auth
                     <div class="flex items-center gap-4 ml-auto">
-                        {{-- Fitur Khusus Pedagang --}}
                         @if (auth()->user()->role === 'pedagang')
-                            {{-- Tombol Daftar Pedagang (Hanya tampil jika belum menjadi pedagang) --}}
+                            @php
+                                $hasPendingVerif = auth()->user()->hasPendingVerification();
+                                $canToggleJualan = auth()->user()->pedagang && auth()->user()->pedagang->verified_user;
+                            @endphp
+
+                            <div
+                                class="flex items-center space-x-3 bg-white px-4 py-2 rounded-2xl shadow-sm border border-orange-100">
+                                <div class="text-right">
+                                    <p id="gps-text"
+                                        class="text-[9px] font-bold uppercase {{ auth()->user()->pedagangAktif() ? 'text-green-500' : 'text-red-500' }}">
+                                        {{ auth()->user()->pedagangAktif() ? 'ONLINE' : 'OFFLINE' }}
+                                    </p>
+                                    <p class="text-[9px] text-gray-400 font-bold uppercase">Status Jualan</p>
+                                </div>
+
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="gps-switch" class="sr-only peer"
+                                        {{ auth()->user()->pedagangAktif() ? 'checked' : '' }}
+                                        {{ $canToggleJualan ? '' : 'disabled' }}>
+                                    <div
+                                        class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500">
+                                    </div>
+                                </label>
+                            </div>
+                           
+
                             @if (!auth()->user()->sudahMenjadiPedagang())
                                 <a href="{{ route('pedagang.index') }}"
                                     class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">
@@ -104,28 +111,29 @@
                                 </a>
                             @endif
 
-                            {{-- Tombol menu --}}
                             <a href="{{ route('menu.index') }}"
                                 class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">
                                 Menu
                             </a>
 
-                            {{-- Tombol Verifikasi Akun (Hanya tampil jika pedagang belum aktif) --}}
                             @if (!auth()->user()->pedagangAktif())
-                                <a href="{{ route('verifikasi.create') }}"
-                                    class="bg-[#ff6b35] hover:bg-[#e85a2a] text-white font-bold py-2 px-4 rounded-full shadow-lg transition-all active:scale-95 text-sm">
-                                    Verifikasi Akun
-                                </a>
+                                {{-- muncul hanya jika verified user yang ada di table pedagang false atau 0 --}}
+                                @if (auth()->user()->pedagang && !auth()->user()->pedagang->verified_user)
+                                    <a href="{{ route('verifikasi.create') }}"
+                                        class="bg-[#ff6b35] hover:bg-[#e85a2a] text-white font-bold py-2 px-4 rounded-full shadow-lg transition-all active:scale-95 text-sm">
+                                        Verifikasi Akun
+                                    </a>
+                                @endif
                             @endif
                         @endif
-                        {{-- link menu verifikasi yang hanya bisa dilihat oleh admin --}}
+
                         @if (auth()->user()->role === 'admin')
                             <a href="{{ route('verifikasi.index') }}"
                                 class="bg-[#ff6b35] hover:bg-[#e85a2a] text-white font-bold py-2 px-4 rounded-full shadow-lg transition-all active:scale-95 text-sm">
                                 Verifikasi
                             </a>
                         @endif
-                        {{-- Menu Umum (Bisa dilihat semua role yang login) --}}
+
                         <a href="{{ route('profile.edit') }}"
                             class="text-gray-700 hover:text-orange-500 transition-colors text-sm font-medium">Profile</a>
 
@@ -138,15 +146,6 @@
                         </form>
                     </div>
                 @endauth
-
-
-                <div class="p-2 bg-orange-50 rounded-full text-[#ff6b35]">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h7" />
-                    </svg>
-                </div>
             </div>
         </div>
 
@@ -182,42 +181,9 @@
                             Semua</button>
                     </div>
 
-                    <div class="gap-3 overflow-x-auto pb-3 no-scrollbar flex justify-center scroll-smooth">
-                        @forelse($menus ?? [] as $menu)
-                            <div
-                                class="min-w-[220px] bg-white rounded-[1.5rem] shadow-xl overflow-hidden group cursor-pointer border border-white/20 transition-transform hover:scale-[1.02]">
-                                <div class="relative h-32 overflow-hidden">
-                                    <img src="{{ Str::startsWith($menu->foto_produk, 'http') ? $menu->foto_produk : asset('storage/' . $menu->foto_produk) }}"
-                                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                                    <div
-                                        class="absolute top-2 right-2 bg-orange-500/90 backdrop-blur-sm text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow-lg">
-                                        ★ 4.8
-                                    </div>
-                                </div>
-
-                                <div class="p-3">
-                                    <h4 class="font-bold text-gray-800 text-sm truncate">{{ $menu->nama_produk }}</h4>
-                                    <p class="text-gray-400 text-[10px] font-medium mb-3">
-                                        {{ $menu->pedagang->nama_toko }}</p>
-
-                                    <div class="flex justify-between items-center border-t border-gray-50 pt-2">
-                                        <span class="text-orange-600 font-black text-base">
-                                            <small class="text-[9px] font-normal text-gray-400">Rp</small>
-                                            {{ number_format($menu->harga_minimal, 0, ',', '.') }}
-                                        </span>
-                                        <button
-                                            class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1.5 rounded-lg text-[9px] font-bold shadow-md shadow-orange-200 transition-all active:scale-90 uppercase">
-                                            Order
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
-                            <div
-                                class="bg-white/10 backdrop-blur-md p-6 rounded-2xl w-full text-center text-white border border-white/10 text-xs">
-                                Data jajanan belum tersedia
-                            </div>
-                        @endforelse
+                    <div id="menu-list"
+                        class="gap-3 overflow-x-auto pb-3 no-scrollbar flex justify-center scroll-smooth">
+                        {{-- Data akan diisi oleh renderMenuCards --}}
                     </div>
                 </div>
             </div>
@@ -227,135 +193,224 @@
 
     <script>
         let map;
-        let markers = []; // Array untuk menyimpan markers
+        let markers = [];
+        let watchId = null;
+        const storageBase = '{{ asset('storage') }}';
+        window.currentUser = @json(Auth::user());
+
+        // Koordinat Batas Kota Tasikmalaya (Approximate Bounding Box)
+        const TASIK_BOUNDS = {
+            latMin: -7.4200,
+            latMax: -7.2600,
+            lngMin: 108.1500,
+            lngMax: 108.2800
+        };
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize map
             map = L.map('map', {
                 zoomControl: false
-            }).setView([-7.3274, 108.2207], 15);
+            }).setView([-7.3274, 108.2207], 14);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-            // Load initial map data
             loadMapData();
+            loadMenuData();
         });
 
-        // Fungsi untuk load ulang data peta secara real-time
+        // Cek apakah lokasi ada di Tasik
+        function isInsideTasikmalaya(lat, lng) {
+            return lat >= TASIK_BOUNDS.latMin &&
+                lat <= TASIK_BOUNDS.latMax &&
+                lng >= TASIK_BOUNDS.lngMin &&
+                lng <= TASIK_BOUNDS.lngMax;
+        }
+
         function loadMapData() {
-            // Hapus semua markers yang ada
             markers.forEach(marker => map.removeLayer(marker));
             markers = [];
 
-            // Fetch data pedagang aktif dari server
             fetch('/api/pedagang-aktif')
                 .then(response => response.json())
                 .then(data => {
                     data.forEach(pedagang => {
                         if (pedagang.latitude && pedagang.longitude) {
+                            const gerobakImage = pedagang.foto_gerobak ?
+                                (pedagang.foto_gerobak.startsWith('http') ?
+                                    pedagang.foto_gerobak :
+                                    `${storageBase}/${pedagang.foto_gerobak}`) :
+                                null;
+
+                            const iconHtml = gerobakImage ?
+                                `<div class='marker-gerobak'><img src='${gerobakImage}' alt='${pedagang.nama_toko}' /></div>` :
+                                "<div class='bg-orange-500 p-2 rounded-full border-2 border-white shadow-xl text-xl flex items-center justify-center animate-bounce'>🍢</div>";
+
                             var customIcon = L.divIcon({
                                 className: 'custom-div-icon',
-                                html: "<div class='bg-orange-500 p-2 rounded-full border-2 border-white shadow-xl text-xl flex items-center justify-center animate-bounce'>🍢</div>",
-                                iconSize: [42, 42],
-                                iconAnchor: [21, 42]
+                                html: iconHtml,
+                                iconSize: [50, 50],
+                                iconAnchor: [25, 50],
+                                popupAnchor: [0, -45]
                             });
 
                             var marker = L.marker([pedagang.latitude, pedagang.longitude], {
                                     icon: customIcon
                                 })
                                 .addTo(map)
-                                .bindPopup(`<div class='p-2'><b>${pedagang.nama_toko}</b><br><small>${pedagang.jenis_jajanan}</small></div>`);
+                                .bindPopup(
+                                    `<div class='p-2'><b>${pedagang.nama_toko}</b><br><small>${pedagang.jenis_jajanan}</small></div>`
+                                    );
 
                             markers.push(marker);
                         }
                     });
-                })
-                .catch(error => console.error('Error loading map data:', error));
+                });
         }
 
-        let watchId = null;
+        function loadMenuData() {
+            fetch('/api/menus-aktif')
+                .then(response => response.json())
+                .then(data => {
+                    renderMenuCards(data);
+                });
+        }
 
-        document.getElementById('gps-switch').addEventListener('change', function() {
-            if(this.checked) {
-                startTracking();
-            } else {
-                stopTracking();
-            }
-        });
+        function renderMenuCards(menus) {
+    const menuList = document.getElementById('menu-list');
+    if (!menuList) return;
+
+    if (!menus.length) {
+        menuList.innerHTML = `<div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl w-full text-center text-white border border-white/10 text-xs">Data jajanan belum tersedia</div>`;
+        return;
+    }
+
+    const userRole = window.currentUser ? window.currentUser.role : 'guest';
+
+    menuList.innerHTML = menus.map(menu => {
+        const imageUrl = menu.foto_produk && menu.foto_produk.startsWith('http') ?
+            menu.foto_produk :
+            `${storageBase}/${menu.foto_produk}`;
+
+        const commonButtonClasses = 'px-4 py-1.5 rounded-lg text-[9px] font-bold transition-all uppercase';
+        let buttonHtml = '';
+
+        if (userRole === 'pembeli') {
+            buttonHtml = `<button onclick="handleOrder(${menu.id})" class="bg-orange-500 hover:bg-orange-600 text-white ${commonButtonClasses} shadow-md shadow-orange-200 active:scale-90">Order</button>`;
+        } else {
+            buttonHtml = `<button onclick="handleRestrictedOrder('${userRole}')" class="bg-gray-300 cursor-not-allowed text-gray-500 ${commonButtonClasses} shadow-none">Order</button>`;
+        }
+
+        return `
+            <div class="min-w-[220px] bg-white rounded-[1.5rem] shadow-xl overflow-hidden group cursor-pointer border border-white/20 transition-transform hover:scale-[1.02]">
+                <div class="relative h-32 overflow-hidden">
+                    <img src="${imageUrl}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <div class="absolute top-2 right-2 bg-orange-500/90 backdrop-blur-sm text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow-lg">★ 4.8</div>
+                </div>
+                <div class="p-3">
+                    <h4 class="font-bold text-gray-800 text-sm truncate">${menu.nama_produk}</h4>
+                    <p class="text-gray-400 text-[10px] font-medium mb-3">${menu.pedagang?.nama_toko || ''}</p>
+                    <div class="flex justify-between items-center border-t border-gray-50 pt-2">
+                        <span class="text-orange-600 font-black text-base"><small class="text-[9px] font-normal text-gray-400">Rp</small> ${new Intl.NumberFormat('id-ID').format(menu.harga_minimal)}</span>
+                        ${buttonHtml}
+                    </div>
+                </div>
+            </div>`;
+    }).join('');
+}
+
+// 2. Fungsi untuk menangani klik pada tombol yang dibatasi
+function handleRestrictedOrder(role) {
+    if (role === 'guest') {
+        alert("Ingin jajan? Yuk, login atau daftar akun pembeli terlebih dahulu!");
+        // Atau arahkan ke login: window.location.href = '/login';
+    } else if (role === 'pedagang') {
+        alert("Akun pedagang hanya untuk berjualan. Silakan gunakan akun pembeli untuk melakukan pemesanan.");
+    }
+}
+
+// 3. Fungsi order (untuk nanti jika backend sudah siap)
+function handleOrder(menuId) {
+    console.log("Memproses order untuk menu ID: " + menuId);
+    // Logika transaksi Anda nanti di sini
+}
+
+        const gpsSwitch = document.getElementById('gps-switch');
+        if (gpsSwitch) {
+            gpsSwitch.addEventListener('change', function() {
+                if (this.checked) {
+                    startTracking();
+                } else {
+                    stopTracking();
+                }
+            });
+        }
 
         function startTracking() {
             if (!navigator.geolocation) {
                 alert("GPS tidak didukung!");
-                document.getElementById('gps-switch').checked = false;
+                gpsSwitch.checked = false;
                 return;
             }
 
-            // 1. Ubah UI Instan
-            updateUI(true);
-
-            // 2. Mulai Pantau Pergerakan
             watchId = navigator.geolocation.watchPosition(
                 (position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+
+                    // Validasi Lokasi Tasikmalaya
+                    if (!isInsideTasikmalaya(lat, lng)) {
+                        alert(
+                            "Maaf, lokasi Anda berada di luar jangkauan Kota Tasikmalaya. Status jualan dinonaktifkan.");
+                        stopTracking(); // Matikan tracking otomatis
+                        gpsSwitch.checked = false;
+                        return;
+                    }
+
                     const coords = {
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
+                        latitude: lat,
+                        longitude: lng,
                         is_active: 1
                     };
 
-                    // 3. Kirim ke Database
                     axios.post('/update-lokasi-pedagang', coords)
                         .then(res => {
-                            console.log("Lokasi terupdate di server");
-                            // 4. Re-render map secara real-time
+                            updateUI(true);
                             loadMapData();
+                            loadMenuData();
                         })
                         .catch(err => {
-                            console.error("Gagal sinkron lokasi:", err);
-                            // Jika gagal, matikan tracking
-                            document.getElementById('gps-switch').checked = false;
+                            gpsSwitch.checked = false;
                             updateUI(false);
-                            alert("Gagal mengupdate lokasi. Silakan coba lagi.");
                         });
                 },
                 (error) => {
-                    console.error("GPS Error:", error);
-                    document.getElementById('gps-switch').checked = false;
+                    gpsSwitch.checked = false;
                     updateUI(false);
-                    alert("Gagal mengambil lokasi. Pastikan GPS aktif dan beri izin akses lokasi.");
-                },
-                {
-                    enableHighAccuracy: true,
-                    maximumAge: 30000, // Cache lokasi maksimal 30 detik
-                    timeout: 27000 // Timeout 27 detik
+                    alert("Gagal mengambil lokasi. Pastikan GPS aktif.");
+                }, {
+                    enableHighAccuracy: true
                 }
             );
         }
 
         function stopTracking() {
-            // 1. Stop GPS tracking
             if (watchId) {
                 navigator.geolocation.clearWatch(watchId);
                 watchId = null;
             }
 
-            // 2. Kirim status OFF ke server
             axios.post('/update-lokasi-pedagang', {
                 is_active: 0,
                 latitude: null,
                 longitude: null
             }).then(() => {
                 updateUI(false);
-                console.log("Status: Offline (Lokasi dihapus)");
-                // 3. Re-render map agar marker pedagang hilang
                 loadMapData();
-            }).catch(err => {
-                console.error("Gagal update status offline:", err);
-                alert("Gagal mematikan tracking. Silakan refresh halaman.");
+                loadMenuData();
             });
         }
 
         function updateUI(isActive) {
             const text = document.getElementById('gps-text');
-            if(isActive) {
+            if (isActive) {
                 text.innerText = "ONLINE";
                 text.classList.replace('text-red-500', 'text-green-500');
             } else {
@@ -363,10 +418,15 @@
                 text.classList.replace('text-green-500', 'text-red-500');
             }
         }
+
+        // Jalankan pembaruan data setiap 5 atau 10 detik
+        setInterval(function() {
+            loadMapData(); // Mengambil posisi terbaru pedagang dan memperbarui marker
+            console.log("Menyinkronkan lokasi pedagang...");
+        }, 10000); // 10000 ms = 10 detik
     </script>
 
     <style>
-        /* Menghilangkan scrollbar tapi tetap bisa di-scroll */
         .no-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -376,7 +436,6 @@
             scrollbar-width: none;
         }
 
-        /* Memastikan leaflet tidak menutupi UI kita */
         .leaflet-container {
             z-index: 0 !important;
         }
@@ -385,12 +444,18 @@
             display: none;
         }
 
-        /* Semkontrol bawaan agar clean */
-
-        /* Custom Marker */
         .custom-div-icon {
             background: none !important;
             border: none !important;
+        }
+
+        .marker-gerobak img {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 9999px;
+            border: 2px solid white;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
         }
     </style>
 </x-app-layout>

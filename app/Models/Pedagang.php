@@ -14,6 +14,7 @@ class Pedagang extends Model
         'nama_toko',
         'jenis_jajanan',
         'is_active',
+        'verified_user',
         'latitude',
         'longitude',
         'last_heartbeat',

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Menu;
 use App\Models\Pedagang;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 
 class PedagangController extends Controller
 {
@@ -17,13 +16,11 @@ class PedagangController extends Controller
         }
 
         $pedagangs = Pedagang::all();
-        // Sesuaikan path view dengan struktur folder Anda
         return view('page.form_pedagang.index', compact('pedagangs'));
     }
 
     public function store(Request $request)
     {
-        // 1. Pastikan pengguna sudah login sebelum memproses
         if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
         }
@@ -36,8 +33,6 @@ class PedagangController extends Controller
 
         try {
             $pedagang = new Pedagang();
-
-            // Menggunakan Auth::id() lebih aman
             $pedagang->user_id = Auth::id();
             $pedagang->nama_toko = $request->nama_toko;
             $pedagang->jenis_jajanan = $request->jenis_jajanan;
@@ -45,8 +40,6 @@ class PedagangController extends Controller
             if ($request->hasFile('foto_gerobak')) {
                 $file = $request->file('foto_gerobak');
                 $nama_file = time() . '_' . $file->getClientOriginalName();
-
-                // Simpan ke folder sesuai struktur folder Anda
                 $path = $file->storeAs('foto_gerobak', $nama_file, 'public');
                 $pedagang->foto_gerobak = $path;
             }
@@ -55,46 +48,94 @@ class PedagangController extends Controller
 
             return redirect()->back()->with('success', 'Profil toko berhasil didaftarkan!');
         } catch (\Exception $e) {
-            // Ini akan memberitahu jika ada masalah koneksi atau query database
             return redirect()->back()->with('error', 'Gagal menyimpan: ' . $e->getMessage());
         }
     }
 
     public function updateLokasi(Request $request)
-{
-    // Cari data pedagang milik user yang login
-    $pedagang = Pedagang::where('user_id', auth()->id())->first();
+    {
+        $pedagang = Pedagang::where('user_id', auth()->id())->first();
 
-    if ($pedagang) {
-        $pedagang->update([
-            'is_active' => $request->is_active,
-            // Jika is_active 0, maka koordinat diset NULL
-            'latitude'  => $request->is_active ? $request->latitude : null,
-            'longitude' => $request->is_active ? $request->longitude : null,
-            'last_heartbeat' => $request->is_active ? now() : $pedagang->last_heartbeat
-        ]);
+        if ($pedagang) {
+            if (! $pedagang->verified_user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Akun Anda belum diverifikasi admin. GPS tidak dapat diaktifkan.'
+                ], 403);
+            }
 
-        return response()->json(['status' => 'success']);
+            $pedagang->update([
+                'is_active' => $request->is_active,
+                'latitude'  => $request->is_active ? $request->latitude : null,
+                'longitude' => $request->is_active ? $request->longitude : null,
+                'last_heartbeat' => $request->is_active ? now() : $pedagang->last_heartbeat
+            ]);
+
+            return response()->json(['status' => 'success']);
+        }
+
+        return response()->json(['status' => 'error'], 404);
     }
 
-    return response()->json(['status' => 'error'], 404);
-}
-
     /**
-     * Get active pedagang data for real-time map updates
+     * Mengambil data pedagang aktif dengan filter radius Kota Tasikmalaya
      */
     public function getActivePedagang()
     {
         try {
+            // Tentukan Titik Pusat Kota Tasikmalaya (Tugu Asmaul Husna/Pusat Kota)
+            $center_lat = -7.3274; 
+            $center_lng = 108.2207;
+            
+            // Tentukan radius maksimal dalam Kilometer (Misal: 15 KM untuk mencakup area kota)
+            $radius = 15; 
+
+            // Query dengan rumus Haversine untuk menghitung jarak di dalam database
             $pedagangAktif = Pedagang::where('is_active', true)
+                ->where('verified_user', true)
                 ->whereNotNull('latitude')
                 ->whereNotNull('longitude')
-                ->select('id', 'nama_toko', 'jenis_jajanan', 'latitude', 'longitude', 'last_heartbeat')
+                ->select('*')
+                // 6371 adalah konstanta untuk radius bumi dalam Kilometer
+                ->selectRaw(
+                    "(6371 * acos(cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))) AS distance",
+                    [$center_lat, $center_lng, $center_lat]
+                )
+                // Filter agar hanya mengambil yang masuk dalam radius
+                ->having('distance', '<', $radius)
+                // Urutkan dari yang terdekat
+                ->orderBy('distance', 'asc')
                 ->get();
 
             return response()->json($pedagangAktif);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Gagal mengambil data pedagang'], 500);
+            return response()->json(['error' => 'Gagal mengambil data pedagang: ' . $e->getMessage()], 500);
         }
     }
+
+    // App\Http\Controllers\PedagangController.php
+
+public function getPedagangAktif()
+{   
+    $pedagang = Pedagang::where('is_active', true)
+                        ->where('verified_user', true)
+                        ->get();
+
+    return response()->json($pedagang);
+}
+
+// App\Http\Controllers\MenuController.php
+
+public function getMenusAktif()
+{
+    // Mengambil menu dari pedagang yang sedang aktif saja
+    $menus = Menu::with('pedagang')
+                ->whereHas('pedagang', function($query) {
+                    $query->where('is_active', true)
+                          ->where('verified_user', true);
+                })
+                ->get();
+
+    return response()->json($menus);
+}
 }

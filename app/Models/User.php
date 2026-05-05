@@ -75,7 +75,33 @@ class User extends Authenticatable
         return $this->pedagang && $this->pedagang->is_active == 1;
     }
 
+    /**
+     * Cek apakah pedagang sudah diverifikasi oleh admin
+     * @return bool
+     */
+    public function pedagangTerverifikasi()
+    {
+        return $this->pedagang && $this->pedagang->verified_user == 1;
+    }
+
+    /**
+     * Relasi ke tabel verifikasi yang menandakan user sudah mengajukan verifikasi
+     */
+    public function verif()
+    {
+        return $this->hasOne(Verif::class);
+    }
+
+    /**
+     * Cek apakah user sudah mengajukan verifikasi ke admin
+     * @return bool
+     */
+    public function hasPendingVerification()
+    {
+        return $this->verif()->exists();
+    }
+
     public function hasRole($role) {
-    return $this->role === $role; // Sesuaikan dengan nama kolom role di tabel user Anda
-    }   
+        return $this->role === $role; // Sesuaikan dengan nama kolom role di tabel user Anda
+    }
 }

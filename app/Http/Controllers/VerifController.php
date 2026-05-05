@@ -52,15 +52,15 @@ class VerifController extends Controller
     $pedagang = Pedagang::where('user_id', $verif->user_id)->first();
 
     if ($pedagang) {
-        // 3. Ubah status menjadi true
+        // 3. Tandai pedagang sebagai terverifikasi oleh admin
         $pedagang->update([
-            'is_active' => true
+            'verified_user' => true,
         ]);
 
         // 4. Hapus data verifikasi (karena sudah disetujui)
         $verif->delete();
 
-        return redirect()->back()->with('success', 'Pedagang berhasil diverifikasi dan kini telah Aktif!');
+        return redirect()->back()->with('success', 'Pedagang berhasil diverifikasi oleh admin.');
     }
 
     return redirect()->back()->with('error', 'Data pedagang tidak ditemukan.');

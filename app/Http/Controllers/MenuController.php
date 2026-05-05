@@ -95,4 +95,27 @@ class MenuController extends Controller
         $menu->delete();
         return redirect()->route('menu.index')->with('success', 'Menu berhasil dihapus.');
     }
+
+    public function getActiveMenus()
+    {
+        $center_lat = -7.3274;
+        $center_lng = 108.2207;
+        $radius = 15;
+
+        $menus = Menu::with(['pedagang:id,nama_toko'])
+            ->join('pedagangs', 'menus.pedagang_id', '=', 'pedagangs.id')
+            ->where('pedagangs.is_active', true)
+            ->where('pedagangs.verified_user', true)
+            ->whereNotNull('pedagangs.latitude')
+            ->whereNotNull('pedagangs.longitude')
+            ->select('menus.id', 'menus.pedagang_id', 'menus.nama_produk', 'menus.harga_minimal', 'menus.foto_produk')
+            ->selectRaw(
+                "(6371 * acos(cos(radians(?)) * cos(radians(pedagangs.latitude)) * cos(radians(pedagangs.longitude) - radians(?)) + sin(radians(?)) * sin(radians(pedagangs.latitude)))) AS distance",
+                [$center_lat, $center_lng, $center_lat]
+            )
+            ->having('distance', '<', $radius)
+            ->get();
+
+        return response()->json($menus);
+    }
 }

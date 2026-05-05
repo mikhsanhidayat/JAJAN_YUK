@@ -16,13 +16,14 @@ Route::get('/', function () {
 
 // Route untuk Dashboard (Setelah Login)
 Route::get('/dashboard', function () {
-    // Ambil data menu yang pedagangnya aktif
+    // Ambil data menu yang pedagangnya aktif dan sudah diverifikasi
     $menus = Menu::with('pedagang')->whereHas('pedagang', function($q) {
-        $q->where('is_active', true);
+        $q->where('is_active', true)
+          ->where('verified_user', true);
     })->get();
 
     return view('dashboard', compact('menus'));
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 // Grouping Route yang perlu Login
 Route::middleware('auth')->group(function () {
@@ -39,14 +40,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/pedagang', [PedagangController::class, 'index'])->name('pedagang.index');
     Route::post('/pedagang', [PedagangController::class, 'store'])->name('pedagang.store');
     Route::post('/update-lokasi-pedagang', [PedagangController::class, 'updateLokasi'])->middleware('auth');
-    Route::get('/api/pedagang-aktif', [PedagangController::class, 'getActivePedagang'])->middleware('auth');
 
     // Route untuk halaman verifikasi
     Route::get('/verifikasi', [VerifController::class, 'index'])->name('verifikasi.index');
     Route::get('/verifikasi/create', [VerifController::class, 'create'])->name('verifikasi.create');
     Route::post('/verifikasi', [VerifController::class, 'store'])->name('verifikasi.store');
     Route::post('/verifikasi/{id}/approve', [VerifController::class, 'approve'])->name('verifikasi.approve');
-
 });
 
+// Route publik untuk menampilkan lokasi pedagang aktif di mode tamu
+Route::get('/api/pedagang-aktif', [PedagangController::class, 'getActivePedagang']);
+// Route publik untuk menampilkan menu jajanan dari pedagang yang sedang aktif
+Route::get('/api/menus-aktif', [
+    App\Http\Controllers\MenuController::class,
+    'getActiveMenus'
+]);
 require __DIR__.'/auth.php';

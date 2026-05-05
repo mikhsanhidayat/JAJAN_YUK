@@ -21,6 +21,7 @@ return new class extends Migration
         $table->decimal('longitude', 11, 8)->nullable();
         $table->timestamp('last_heartbeat')->nullable(); // Anti gerobak hantu
         $table->string('foto_gerobak')->nullable();
+        $table->boolean('verified_user')->default(false); // Pastikan satu user hanya bisa jadi satu pedagang
         $table->timestamps();
     });
     }

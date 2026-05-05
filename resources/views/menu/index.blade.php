@@ -1,6 +1,7 @@
 <x-app-layout>
-    <div class="bg-white border-b border-orange-100 shadow-sm">
-        <div class="w-full py-8 px-4 sm:px-6 lg:px-8">
+    <!-- HEADER SECTION: Added 'sticky top-0 z-40' to make it fixed on scroll -->
+    <div class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-orange-100 shadow-sm">
+        <div class="w-full py-6 px-4 sm:px-6 lg:px-8">
             <div class="max-w-7xl mx-auto">
                 <div class="flex items-center justify-between">
                     <div class="w-48 text-left">
@@ -16,7 +17,7 @@
                     </div>
 
                     <div class="flex-1 text-center">
-                        <h2 class="text-3xl font-black text-orange-500 uppercase tracking-tight leading-tight">
+                        <h2 class="text-2xl md:text-3xl font-black text-orange-500 uppercase tracking-tight leading-tight">
                             Katalog Menu
                         </h2>
                         <p class="mt-1 text-xs sm:text-sm text-gray-500 font-medium">
@@ -40,7 +41,7 @@
             </div>
 
             @if(session('success'))
-            <div id="alert-success" class="fixed top-6 right-6 z-50 flex items-center gap-3 px-6 py-4 bg-green-50 border-l-4 border-green-500 rounded-xl shadow-lg animate-fade-in">
+            <div id="alert-success" class="fixed top-24 right-6 z-50 flex items-center gap-3 px-6 py-4 bg-green-50 border-l-4 border-green-500 rounded-xl shadow-lg animate-fade-in">
                 <div class="flex-shrink-0 text-green-500">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
@@ -104,6 +105,7 @@
         </div>
     </div>
 
+    <!-- Modals (Add & Edit) remain the same -->
     <div id="modal-menu" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white w-full max-w-lg rounded-[3rem] shadow-2xl p-10 animate-scale-in border border-white my-auto">
             <div class="flex justify-between items-center mb-8">
@@ -226,7 +228,6 @@
     </style>
 
     <script>
-        // Auto-hide alert success setelah 5 detik dengan fade-out animation
         document.addEventListener('DOMContentLoaded', function() {
             const alertSuccess = document.getElementById('alert-success');
             if (alertSuccess) {
@@ -235,12 +236,11 @@
                     alertSuccess.classList.add('animate-fade-out');
                     setTimeout(function() {
                         alertSuccess.remove();
-                    }, 400); // Sesuai dengan durasi animasi fade-out
-                }, 5000); // Hilang setelah 5 detik
+                    }, 400);
+                }, 5000);
             }
         });
 
-        // Fungsi untuk buka/tutup modal
         function toggleModal(id) {
             const modal = document.getElementById(id);
             if (modal.classList.contains('hidden')) {
@@ -252,7 +252,6 @@
             }
         }
 
-        // Menampilkan nama file yang dipilih
         function updateLabel(input, labelId) {
             const label = document.getElementById(labelId);
             if (input.files.length > 0) {
@@ -261,23 +260,15 @@
             }
         }
 
-        // Fungsi utama untuk memicu Modal Edit
         function openEditModal(id, nama, tipe, harga) {
-            // 1. Ubah Action Form secara dinamis
             const editForm = document.getElementById('edit-menu-form');
             editForm.action = `/menu/${id}`; 
-
-            // 2. Isi nilai ke input modal
             document.getElementById('edit-nama-produk').value = nama;
             document.getElementById('edit-tipe-harga').value = tipe;
             document.getElementById('edit-harga-minimal').value = harga;
-
-            // 3. Reset label foto
             const labelFoto = document.getElementById('label-edit-foto');
             labelFoto.innerText = "Klik Untuk Ganti Foto";
             labelFoto.classList.remove('text-orange-600');
-
-            // 4. Tampilkan modal
             toggleModal('modal-edit-menu');
         }
     </script>
