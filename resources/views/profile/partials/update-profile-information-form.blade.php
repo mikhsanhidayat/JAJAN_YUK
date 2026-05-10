@@ -56,18 +56,58 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Simpan nilai awal untuk deteksi perubahan
+        const initialValues = {
+            nama: document.getElementById('nama').value,
+            email: document.getElementById('email').value
+        };
+
         function confirmUpdate() {
+            const currentNama = document.getElementById('nama').value.trim();
+            const currentEmail = document.getElementById('email').value.trim();
+
+            // Validasi: Cek apakah inputan kosong
+            if (!currentNama || !currentEmail) {
+                Swal.fire({
+                    title: 'Input Kosong!',
+                    text: 'Semua field harus diisi.',
+                    icon: 'warning',
+                    confirmButtonColor: '#f97316',
+                    confirmButtonText: 'Mengerti',
+                    customClass: {
+                        popup: 'rounded-[2rem]',
+                        confirmButton: 'rounded-xl px-6 py-3 font-bold'
+                    }
+                });
+                return;
+            }
+
+            // Validasi: Cek apakah ada perubahan
+            if (currentNama === initialValues.nama && currentEmail === initialValues.email) {
+                Swal.fire({
+                    title: 'Tidak Ada Perubahan',
+                    text: 'Anda belum mengubah apapun pada data profil.',
+                    icon: 'info',
+                    confirmButtonColor: '#f97316',
+                    confirmButtonText: 'Oke',
+                    customClass: {
+                        popup: 'rounded-[2rem]',
+                        confirmButton: 'rounded-xl px-6 py-3 font-bold'
+                    }
+                });
+                return;
+            }
+
+            // Modal Konfirmasi
             Swal.fire({
                 title: 'Simpan Perubahan?',
                 text: "Apakah Anda yakin ingin memperbarui data profil Anda?",
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#f97316', // Warna Orange-500
+                confirmButtonColor: '#f97316', 
                 cancelButtonColor: '#6b7280',
                 confirmButtonText: 'Ya, Simpan!',
                 cancelButtonText: 'Batal',
-                border: 'none',
-                borderRadius: '2rem', // Menyesuaikan dengan gaya JajanYuk
                 customClass: {
                     popup: 'rounded-[2rem]',
                     confirmButton: 'rounded-xl px-6 py-3 font-bold',
@@ -80,4 +120,22 @@
             })
         }
     </script>
+
+    @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    title: 'Terjadi Kesalahan!',
+                    text: '{{ $errors->first() }}',
+                    icon: 'error',
+                    confirmButtonColor: '#f97316',
+                    confirmButtonText: 'Perbaiki',
+                    customClass: {
+                        popup: 'rounded-[2rem]',
+                        confirmButton: 'rounded-xl px-6 py-3 font-bold'
+                    }
+                });
+            });
+        </script>
+    @endif
 </section>

@@ -11,7 +11,7 @@
     </style>
 </head>
 <body class="bg-gray-50">
-
+    @include('layouts.header')
     <div class="min-h-screen flex flex-col items-center justify-center py-12 px-4">
         <div class="w-full max-w-lg bg-white p-10 rounded-[3rem] shadow-2xl shadow-orange-100 border border-gray-100">
             

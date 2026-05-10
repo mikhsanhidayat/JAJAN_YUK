@@ -39,7 +39,7 @@
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">👤</span>
                         <input id="nama" class="block w-full pl-11 pr-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-orange-500 transition-all text-sm shadow-sm" 
-                               type="text" name="nama" value="{{ old('nama') }}" required autofocus placeholder="Contoh: Budi Jajanan" />
+                               type="text" name="nama" value="{{ old('nama') }}" required autofocus placeholder="name" />
                     </div>
                     <x-input-error :messages="$errors->get('nama')" class="mt-2" />
                 </div>

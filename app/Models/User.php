@@ -57,6 +57,11 @@ class User extends Authenticatable
         return $this->hasOne(Pedagang::class);
     }
 
+    public function orders() {
+    return $this->hasMany(Order::class);
+}
+  
+
     /**
      * Cek apakah user sudah terdaftar sebagai pedagang
      * @return bool

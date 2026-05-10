@@ -4,6 +4,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PedagangController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VerifController;
+use App\Http\Controllers\OrderController;
 use App\Models\Menu; // Tambahkan ini agar model Menu bisa dibaca
 use Illuminate\Support\Facades\Route;
 
@@ -46,13 +47,28 @@ Route::middleware('auth')->group(function () {
     Route::get('/verifikasi/create', [VerifController::class, 'create'])->name('verifikasi.create');
     Route::post('/verifikasi', [VerifController::class, 'store'])->name('verifikasi.store');
     Route::post('/verifikasi/{id}/approve', [VerifController::class, 'approve'])->name('verifikasi.approve');
+
+    // Route untuk Pesanan
+    Route::get('/pesanan', [OrderController::class, 'index'])->name('orders.index');
+    Route::post('/pesanan', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/payment/success', function() {
+        return view('orders.payment_success');
+    })->name('payment.success');
+
+    Route::get('/pedagang/pesanan', [OrderController::class, 'merchantOrders'])->name('pedagang.orders');
+    Route::patch('/pesanan/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+    Route::get('/orders/{externalId}/status', [OrderController::class, 'checkStatus'])->name('orders.status');
 });
 
 // Route publik untuk menampilkan lokasi pedagang aktif di mode tamu
 Route::get('/api/pedagang-aktif', [PedagangController::class, 'getActivePedagang']);
 // Route publik untuk menampilkan menu jajanan dari pedagang yang sedang aktif
 Route::get('/api/menus-aktif', [
-    App\Http\Controllers\MenuController::class,
+    MenuController::class,
     'getActiveMenus'
 ]);
+
+// Callback Xendit
+Route::post('/xendit/callback', [OrderController::class, 'xenditCallback']);
+
 require __DIR__.'/auth.php';

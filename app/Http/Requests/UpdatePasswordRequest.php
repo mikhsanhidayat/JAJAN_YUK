@@ -8,6 +8,11 @@ use Illuminate\Validation\Rules\Password;
 class UpdatePasswordRequest extends FormRequest
 {
     /**
+     * The validation error bag for the request.
+     */
+    protected $errorBag = 'updatePassword';
+
+    /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
