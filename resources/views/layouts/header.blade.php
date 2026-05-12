@@ -16,11 +16,30 @@
                     </div>
 
                     <div class="flex-1 text-center">
+                        @php
+                            $currentRoute = Route::currentRouteName();
+                            $defaultTitle = 'Katalog Menu';
+                            $defaultSubtitle = 'Kelola Jajanan di Toko Anda';
+
+                            if (str_contains($currentRoute, 'profile')) {
+                                $defaultTitle = 'Profil Saya';
+                                $defaultSubtitle = 'Kelola informasi profil dan keamanan akun Anda';
+                            } elseif (str_contains($currentRoute, 'orders')) {
+                                $defaultTitle = 'Daftar Pesanan';
+                                $defaultSubtitle = 'Pantau dan kelola pesanan pelanggan Anda';
+                            } elseif (str_contains($currentRoute, 'menu')) {
+                                $defaultTitle = 'Manajemen Menu';
+                                $defaultSubtitle = 'Atur daftar jajanan yang tersedia di toko Anda';
+                            } elseif (str_contains($currentRoute, 'form_pedagang')) {
+                                $defaultTitle = 'Pendaftaran Pedagang';
+                                $defaultSubtitle = 'Lengkapi data untuk mulai berjualan di JajanYuk';
+                            }
+                        @endphp
                         <h2 class="text-2xl md:text-3xl font-black text-orange-500 uppercase tracking-tight leading-tight">
-                            Katalog Menu
+                            {{ $title ?? $defaultTitle }}
                         </h2>
                         <p class="mt-1 text-xs sm:text-sm text-gray-500 font-medium">
-                            Kelola Jajanan di Toko Anda
+                            {{ $subtitle ?? $defaultSubtitle }}
                         </p>
                     </div>
 

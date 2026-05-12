@@ -1,16 +1,10 @@
 <x-app-layout>
+    @include('layouts.header', [
+        'title' => 'Kelola Pesanan',
+        'subtitle' => 'Pantau dan perbarui status jajanan pembeli secara real-time'
+    ])
     <div class="py-12 bg-gray-50 min-h-screen">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-            <div class="mb-8 flex items-center justify-between">
-                <div>
-                    <h2 class="text-3xl font-black text-gray-800 tracking-tight">Kelola Pesanan</h2>
-                    <p class="text-gray-500 font-medium uppercase tracking-widest text-[10px] mt-1">Pantau dan Update Status Jajanan Pembeli</p>
-                </div>
-                <div class="bg-white px-6 py-3 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-3">
-                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                    <span class="text-sm font-bold text-gray-700">Toko Aktif</span>
-                </div>
-            </div>
 
             @if($orders->isEmpty())
                 <div class="bg-white rounded-[2rem] p-12 text-center shadow-sm border border-gray-100">

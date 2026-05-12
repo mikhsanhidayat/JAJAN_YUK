@@ -1,6 +1,9 @@
 <x-app-layout>
 
-    @include('layouts.header')
+    @include('layouts.header', [
+        'title' => 'Manajemen Menu',
+        'subtitle' => 'Kelola daftar produk dan stok jajanan di toko Anda'
+    ])
 
     <div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-6xl mx-auto">

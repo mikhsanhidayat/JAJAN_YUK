@@ -1,12 +1,11 @@
 <x-app-layout>
 
-    @include('layouts.header')
+    @include('layouts.header', [
+        'title' => 'Pesanan Saya',
+        'subtitle' => 'Lihat riwayat dan pantau status pesanan jajanan Kamu'
+    ])
     <div class="py-12 bg-gray-50 min-h-screen">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="mb-8">
-                <h2 class="text-3xl font-black text-gray-800 tracking-tight">Pesanan Saya</h2>
-                <p class="text-gray-500 font-medium uppercase tracking-widest text-[10px] mt-1">Daftar Jajanan yang Kamu Pesan</p>
-            </div>
 
             @if($orders->isEmpty())
                 <div class="bg-white rounded-[2rem] p-12 text-center shadow-sm border border-gray-100">
